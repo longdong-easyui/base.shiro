@@ -12,6 +12,9 @@ File Encoding         : 65001
 
 Date: 2014-05-29 08:47:17
 */
+CREATE DATABASE shiro2
+CHARACTER SET 'utf8'
+COLLATE 'utf8_general_ci';
 
 SET FOREIGN_KEY_CHECKS=0;
 
