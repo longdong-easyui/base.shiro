@@ -11,7 +11,7 @@
 	  
 		<div data-options="region:'north',title:'查询条件',split:false" style="height:50px;padding:10px;">
 			<form id="searchForm">
-				<table>
+				<table style="font-size:12px;">
 					<tr>
 						<td>姓名</td>
 						<td><input type="text" name="username" class="easyui-validatebox"/></td>
