@@ -94,6 +94,7 @@ public class SpringJdbcTest {
 	@Test
 	@Ignore
 	public void updateUser(){
+		
 		/*Long userId = 8L;
 		User user = userService.findOne(userId);
 		user.setBirthday(new Date());
