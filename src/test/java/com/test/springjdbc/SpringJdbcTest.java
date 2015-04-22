@@ -92,7 +92,7 @@ public class SpringJdbcTest {
 		
 	}
 	@Test
-//	@Ignore
+	@Ignore
 	public void updateUser(){
 		/*Long userId = 8L;
 		User user = userService.findOne(userId);
