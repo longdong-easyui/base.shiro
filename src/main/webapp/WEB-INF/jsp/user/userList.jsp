@@ -13,9 +13,9 @@
 			<form id="searchForm">
 				<table style="font-size:12px;">
 					<tr>
-						<td>姓名</td>
+						<td>姓名:</td>
 						<td><input type="text" name="username" class="easyui-validatebox"/></td>
-						<td>性别</td>
+						<td>性别:</td>
 						<td>
 							<select class="easyui-combobox" name="sex" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
 									<option value="">请选择...</option>
@@ -23,7 +23,7 @@
 									<option value="1">女</option>
 							</select>
 						</td>
-						<td>生日</td>
+						<td>生日:</td>
 						<td>
 							<input name="birthday" class="easyui-datebox" />
 						</td>
