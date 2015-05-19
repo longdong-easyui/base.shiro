@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.longdong.entity.Organization;
+import com.longdong.entity.Resource;
 import com.longdong.entity.Role;
 import com.longdong.entity.User;
 import com.longdong.service.OrganizationService;
@@ -164,7 +166,7 @@ public class UserController extends BaseController{
     	 try{
  			user.setCreatedDate(new Timestamp(new Date().getTime()));
  			user.setPassword("111111");
- 			user.setOrganizationId(1L);
+ 			//user.setOrganizationId(1L);
  			User res = userService.createUser(user);
  			setRoleIdsName(res);
  			
@@ -248,6 +250,25 @@ public class UserController extends BaseController{
    		
    		writeJson(list,response);
    	}
+   
+	/**
+	 * 获取下拉框的树控件数据
+	 * @param response
+	 */
+	@RequestMapping("getOrganizationComboTree")
+	public void getOrganizationCombobox(HttpServletResponse response){
+		List<Organization> list =organizationService.findOrganizationByParentId(0L);  //获取根节点
+		Long rootId = list.get(0).getId();
+		
+		List<Organization> organizationList = organizationService.findOrganizationByParentId(rootId);
+		
+		for(Organization r: organizationList){
+			long id = r.getId();
+			List<Organization> children = organizationService.findOrganizationByParentId(id);
+			r.setChildren(children);
+		}
+		writeJson(organizationList,response);
+	}
     /**
 	 * 用于列表页面的显示
 	 * @param res

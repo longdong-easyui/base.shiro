@@ -8,8 +8,6 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang.time.DateUtils;
-
 public class BaseDaoImpl {
 	
 	public static final String dateFormate = "yyyy-MM-dd";
@@ -47,8 +45,8 @@ public class BaseDaoImpl {
 						Date date = (Date)o;
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 						
-						String dateStr = sdf.format(date);
-						
+						String dateStr;
+						dateStr = sdf.format(date);
 						sb.append(" and ").append(field.getName()).append("=").append("'"+dateStr+"'");
 					}else if(returnClazz == Integer.class ){
 						sb.append(" and ").append(field.getName()).append("=").append(o.toString());
@@ -58,9 +56,8 @@ public class BaseDaoImpl {
 		        }
 			}
 			
-			
 		}catch(Exception e){
-			e.fillInStackTrace();
+			e.printStackTrace();
 		}
 		return sb.toString();
 	}

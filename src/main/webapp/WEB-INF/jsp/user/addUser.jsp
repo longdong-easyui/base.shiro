@@ -58,6 +58,10 @@
 					<td><input name="birthday" class="easyui-datebox" /></td>
 				</tr>
 				<tr>
+					<td>所属组织机构</td>
+					<td><input id="setOrganization" name="organizationId"/>  </td>
+				</tr>
+				<tr>
 					<td>所属角色</td>
 					<td><input id="setRole" name="roleIds"/>  </td>
 				</tr>
@@ -74,7 +78,13 @@
 			    multiple:true,         //支持多选      
 			    width:'200'  
 			});  
-			
+			$('#setOrganization').combotree({    
+			    url: '${pageContext.request.contextPath}/user/getOrganizationComboTree', 
+			    method:'POST',
+			    editable:false,
+			    multiple:false,         //不支持多选      
+			    width:'200'  
+			});  
 		});
 	</script>
 </body> 

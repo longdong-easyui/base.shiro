@@ -15,7 +15,7 @@
 			url : '${pageContext.request.contextPath}/resource/findMenuTree', 
 			parentField : 'parentId',
 			onClick : function(node) {
-				console.info(node.url);  
+				//console.info(node.url);  
 				if(node.url != ''){
 					//单击节点进行添加选项卡
 					var opt = {    
