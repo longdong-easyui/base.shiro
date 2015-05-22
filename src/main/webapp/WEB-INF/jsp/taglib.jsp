@@ -10,5 +10,3 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/commons/easyui-extension.js"></script>
 
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/static/jquery.qeditor/css/jquery.qeditor.css" type="text/css">
-<script type="text/javascript" src="${pageContext.request.contextPath}/static/jquery.qeditor/js/jquery.qeditor.js"></script>
