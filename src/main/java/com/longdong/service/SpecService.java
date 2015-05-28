@@ -23,6 +23,8 @@ public interface SpecService {
 	public Map<String, InputStream> findImgById(Long id);
 	public List<SpecDetail> findAllSpecDetail(SpecDetail detail);
 	public SpecDetail createSpecDetail(SpecDetail specDetail);
+	public boolean deleteSpecDetailById(Long id);
+	public SpecDetail updateSpecDetail(SpecDetail specDetail);
 	
 	
 	

@@ -43,10 +43,13 @@
     	<table>
     		<tr>
   				<td>
-    				<a id="btn" href="#" onclick="append();" class="easyui-linkbutton" data-options="iconCls:'icon-add'">增加规格值</a>
+    				<a id="btn1" href="#" onclick="append();" class="easyui-linkbutton" data-options="iconCls:'icon-add'">新增规格值</a>
     			</td>
     			<td>
-    				<a id="btn" href="#" onclick="accept();" class="easyui-linkbutton" data-options="iconCls:'icon-add'">保存</a>
+    				<a id="btn2" href="#" onclick="cancelEdit();" class="easyui-linkbutton" data-options="iconCls:'icon-add'">取消编辑</a>
+    			</td>
+    			<td>
+    				<a id="btn3" href="#" onclick="accept();" class="easyui-linkbutton" data-options="iconCls:'icon-add'">保存</a>
     			</td>
     		</tr>
     	</table>
@@ -57,10 +60,9 @@
  	<script type="text/javascript">
 		var specDetaildg;
 		var editIndex = undefined;
+		var insObj;
 		$(function(){
-			var priKey = $('#priKey').val();
-			console.info('priKey'+priKey);
-			var spectype = $('#spec_type').val();
+			
 			specDetaildg = $('#specDetaildg').datagrid({ 
 				fitColumns:true,
 				idField:'id', 
@@ -75,30 +77,33 @@
 				pageList : [ 10, 20, 30, 40, 50, 100 ], 
 			    columns:[[  
 			        {field:'specName',title:'规格值名称',width:100,editor:{type:'validatebox',options:{required:true,validType:'length[0,10]'}}},
-			        {field:'specId',title:'规格值图片',width:300,formatter:function(value, row, index) {
+			        {field:'specId',title:'规格值图片',width:500,formatter:function(value, row, index) {
+		        		var html='';
+		        		html += '<iframe name="uploadframe" id="uploadframe'+index+'" height="20"';
+		        		html += 'frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"';
+		        		html += 'src="${pageContext.request.contextPath}/spec/toUploadPage?specId=${spec.id}"></iframe>';
+		        		return html;
 			        	
-			        	if(spectype==0){
-			        		var html ="<input type=file name='file"+row.id+"'/>";
-			        		var img = "<img src='${pageContext.request.contextPath}/spec/findImgById?id="+row.id+"'/>";
-			        		return html+img;
-			        	}
 					}},  
-			        {field:'sortNo',title:'排序',width:50,editor:{type:'numberbox',options:{precision:1}}},
+					{field:'img',title:'图片',width:100,formatter:function(value, row, index) {
+						var img = "<img style='height:20;' src='${pageContext.request.contextPath}/spec/findImgById?id="+row.id+"'/>";
+		        		return img;
+					}},
+			        {field:'sortNo',title:'排序',width:50,editor:{type:'numberbox',options:{precision:0}}},
 			        {field:'operate',title:'操作',width:300,formatter:function(value, row, index) {
-						return "<a href='#' click='removeit("+row.id+")'>删除</a>";
+						return "<a href='#' click='removeit("+row.id+","+index+")'>删除</a>";
 					}}, 
 			    ]],
 			    toolbar: '#specDetail_toolbar',
 			    onSelect:function(rowIndex,rowData){
 			    	specDetaildg.datagrid('unselectAll');
 			    },
-			    onAfterEdit:function(row,changes){
-			    	console.info(row);
-					//在用户完成编辑的时候触发。
-					if(row.specName !=''){
-	            		 //更新到数据库
-		                $.ajax({
-							url : '${pageContext.request.contextPath}/spec/insertSpecDetail?specId='+priKey,  
+			    onAfterEdit:function(rowIndex, rowData, changes){
+			    	console.info('onAfterEdit');
+			    	console.info(insObj);
+			    	if(insObj!=null){
+			    		$.ajax({
+							url : '${pageContext.request.contextPath}/spec/updateSpecDetail?id='+insObj.id,  
 							data : row,
 							type:'POST',
 							dataType : 'json',
@@ -109,39 +114,92 @@
 								 	showMessage( '提示',data.desc);
 								 }
 							}
-						});
-	            	}
-					editIndex = undefined;
-				}
+						}); 
+			    		editIndex = undefined;
+			    		specDetaildg.datagrid('load');
+			    	}
+				},
+			    onClickCell: function(index, field){
+		            if (editIndex != index){
+		                if (endEditing()){
+		                	specDetaildg.datagrid('selectRow', index).datagrid('beginEdit', index);
+		                    var ed = specDetaildg.datagrid('getEditor', {index:index,field:field});
+		                    ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+		                    editIndex = index;
+		                }else{
+		                	specDetaildg.datagrid('selectRow', editIndex);
+		                }
+		            }
+		        }
 			}); 
 		});
-		 
+		
 	     function endEditing(){
 	          if (editIndex == undefined){
 	        	  return true
 	          }  
 	     }
 		 function append(){
+			
 			 if (endEditing()){
 				 specDetaildg.datagrid('appendRow',{specName:''});
 				 editIndex = specDetaildg.datagrid('getRows').length-1;
-				
 				 specDetaildg.datagrid('selectRow', editIndex).datagrid('beginEdit', editIndex);
 			 }
 	     }
 		 function accept(){
-	            if (editIndex != undefined){
-	            	var row = specDetaildg.datagrid('getSelected');
-	            	//更新成功后，关闭编辑行
-					specDetaildg.datagrid('endEdit', editIndex);
-	            }
+			 uploadImg(editIndex);
+	        
 	    }
-		function removeit(id){
-			 	
+		/**
+		*	调用iframe中的方法
+		*/
+		function  uploadImg(data){
+			var frameid = 'uploadframe'+editIndex;
+			var ifr = document.getElementById(frameid);
+	    	var win = ifr.window || ifr.contentWindow;
+	    	win.upload(data); // 调用iframe中的a函数
+		}
+		/**
+		*	iframe中的回调方法
+		*/
+		function callback(data){
+			if(data!=null){
+				insObj=data.array;
+				if(data.status==0){
+					 showMessage( '提示',data.desc);
+					 if (editIndex != undefined){
+			            	//更新成功后，关闭编辑行
+							specDetaildg.datagrid('endEdit', editIndex);
+			         } 
+				}else{
+					 showMessage( '提示',data.desc);
+				}
+			}
+			
+		}
+		function cancelEdit(){
 	            if (editIndex == undefined){return}
 	            specDetaildg.datagrid('cancelEdit', editIndex).datagrid('deleteRow', editIndex);
 	            editIndex = undefined;
 	     }
+		function removeit(id,index){
+			 if (editIndex == undefined){
+				 $.ajax({
+						url:'${pageContext.request.contextPath}/spec/deleteSpecDetail?id='+id,  
+						type:'POST',
+						dataType : 'json',
+						success : function(data) {
+							 if(data.status==0){
+								specDetaildg.datagrid('deleteRow', index);
+							  	showMessage( '提示',data.desc);
+							 }else{
+							 	showMessage( '提示',data.desc);
+							 }
+						}
+				});
+			 }
+		}
 	</script>
 </body> 
 

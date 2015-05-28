@@ -156,4 +156,22 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	        specDetail.setId(keyHolder.getKey().longValue());
 	        return specDetail;
 	}
+
+	@Override
+	public boolean deleteSpecDetailById(Long id) {
+		  final String deleteSelfSql = "delete from SpecDetail where id=?";
+	      int row = jdbcTemplate.update(deleteSelfSql, id);
+		return row>0;
+	}
+
+	@Override
+	public SpecDetail updateSpecDetail(SpecDetail specDetail) {
+		
+		  final String sql = "update specDetail set specName=?,sortNo=?,updatedDate=now() where id=?";
+	        jdbcTemplate.update(
+	                sql,
+	                specDetail.getSpecName(),specDetail.getSortNo(),specDetail.getId());
+	                
+	        return specDetail;
+	}
 }

@@ -57,7 +57,13 @@ public class SpecController extends BaseController {
 		 request.setAttribute("spec",spec);
 	     return "spec/editSpec";
 	 }
-	
+	 
+	@RequestMapping("toUploadPage")
+    public String toUploadPage(HttpServletRequest request){
+		String specId = request.getParameter("specId");
+		request.setAttribute("specId", specId);
+    	return "spec/upload";
+    }
 	@RequestMapping("findAllSpec")
 	public void findAllSpec(Spec spec, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -187,8 +193,6 @@ public class SpecController extends BaseController {
 		public void insertSpecDetail(SpecDetail specDetail,HttpServletRequest request,HttpServletResponse response){
 			try {
 				logger.info("insertSpecDetail:"+JSON.toJSONString(specDetail));
-				String specId = request.getParameter("specId");
-				specDetail.setSpecId(Long.valueOf(specId));
 				
 				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;     
 				/**页面控件的文件流**/    
@@ -211,7 +215,37 @@ public class SpecController extends BaseController {
 				writeJson(map,response);
 			}
 		}
+		@RequestMapping("updateSpecDetail")
+		public void updateSpecDetail(SpecDetail specDetail,HttpServletRequest request,HttpServletResponse response){
+			
+			String id = request.getParameter("id");
+			specDetail.setId(Long.valueOf(id));
+			
+			SpecDetail detail = specService.updateSpecDetail(specDetail);
+			
+		}
+		@RequestMapping("uploadImg")
+		public void uploadImg(HttpServletRequest request,HttpServletResponse response){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
+			map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
+			writeJson(map,response);
+		}
 		
+		@RequestMapping("deleteSpecDetail")
+		public void deleteSpecDetail(HttpServletRequest request,HttpServletResponse response){
+			String id = request.getParameter("id");
+			boolean res = specService.deleteSpecDetailById(Long.valueOf(id));
+			Map<String,Object> map = new HashMap<String,Object>();
+			if(res){
+				map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
+				map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
+			}else{
+				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
+				map.put("desc",EnumUtil.RETURN_JSON_STATUS.FAILURE.value);
+			}
+			writeJson(map,response);
+		}
 }
 
 

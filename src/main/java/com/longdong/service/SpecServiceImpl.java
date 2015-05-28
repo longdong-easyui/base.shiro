@@ -67,4 +67,16 @@ public class SpecServiceImpl implements SpecService {
 		
 		return specDao.createSpecDetail(specDetail);
 	}
+
+	@Override
+	public boolean deleteSpecDetailById(Long id) {
+		
+		return specDao.deleteSpecDetailById(id);
+	}
+
+	@Override
+	public SpecDetail updateSpecDetail(SpecDetail specDetail) {
+		return specDao.updateSpecDetail(specDetail);
+		
+	}
 }
