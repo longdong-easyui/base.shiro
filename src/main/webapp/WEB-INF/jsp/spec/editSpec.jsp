@@ -92,7 +92,7 @@
 					}},
 			        {field:'sortNo',title:'排序',width:50,editor:{type:'numberbox',options:{precision:0}}},
 			        {field:'operate',title:'操作',width:300,formatter:function(value, row, index) {
-						return "<a href='#' click='removeit("+row.id+","+index+")'>删除</a>";
+						return "<a href='#' onclick='removeit("+row.id+","+index+")'>删除</a>";
 					}}, 
 			    ]],
 			    toolbar: '#specDetail_toolbar',
@@ -121,16 +121,19 @@
 			    	}
 				},
 			    onClickCell: function(index, field){
-		            if (editIndex != index){
-		                if (endEditing()){
-		                	specDetaildg.datagrid('selectRow', index).datagrid('beginEdit', index);
-		                    var ed = specDetaildg.datagrid('getEditor', {index:index,field:field});
-		                    ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
-		                    editIndex = index;
-		                }else{
-		                	specDetaildg.datagrid('selectRow', editIndex);
-		                }
-		            }
+			    	
+			    	if(field != 'operate'){
+			    		 if (editIndex != index){
+				                if (endEditing()){
+				                	specDetaildg.datagrid('selectRow', index).datagrid('beginEdit', index);
+				                    var ed = specDetaildg.datagrid('getEditor', {index:index,field:field});
+				                    ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+				                    editIndex = index;
+				                }else{
+				                	specDetaildg.datagrid('selectRow', editIndex);
+				                }
+				            }
+			    	}
 		        }
 			}); 
 		});
@@ -183,10 +186,11 @@
 		}
 		function cancelEdit(){
 	            if (editIndex == undefined){return}
-	            specDetaildg.datagrid('cancelEdit', editIndex).datagrid('deleteRow', editIndex);
+	            specDetaildg.datagrid('cancelEdit', editIndex);
 	            editIndex = undefined;
 	     }
 		function removeit(id,index){
+			
 			 if (editIndex == undefined){
 				 $.ajax({
 						url:'${pageContext.request.contextPath}/spec/deleteSpecDetail?id='+id,  
@@ -201,6 +205,8 @@
 							 }
 						}
 				});
+			 }else{
+				 specDetaildg.datagrid('cancelEdit', index).datagrid('deleteRow', index);
 			 }
 		}
 	</script>
