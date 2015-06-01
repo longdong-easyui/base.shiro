@@ -62,6 +62,9 @@ public class SpecController extends BaseController {
     public String toUploadPage(HttpServletRequest request){
 		String specId = request.getParameter("specId");
 		request.setAttribute("specId", specId);
+		String id = request.getParameter("id");
+		request.setAttribute("id", id);
+		
     	return "spec/upload";
     }
 	@RequestMapping("findAllSpec")
@@ -218,11 +221,23 @@ public class SpecController extends BaseController {
 		@RequestMapping("updateSpecDetail")
 		public void updateSpecDetail(SpecDetail specDetail,HttpServletRequest request,HttpServletResponse response){
 			
-			String id = request.getParameter("id");
-			specDetail.setId(Long.valueOf(id));
-			
-			SpecDetail detail = specService.updateSpecDetail(specDetail);
-			
+			try {
+				String id = request.getParameter("id");
+				specDetail.setId(Long.valueOf(id));
+				SpecDetail detail = specService.updateSpecDetail(specDetail);
+				
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
+				map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
+				map.put("array",detail);
+				writeJson(map,response);
+			} catch (Exception e) {
+				logger.error(e, e);
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
+				map.put("desc",e.getMessage());
+				writeJson(map,response);
+			}
 		}
 		@RequestMapping("uploadImg")
 		public void uploadImg(HttpServletRequest request,HttpServletResponse response){

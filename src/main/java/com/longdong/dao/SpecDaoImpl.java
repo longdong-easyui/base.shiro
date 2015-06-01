@@ -167,7 +167,7 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	@Override
 	public SpecDetail updateSpecDetail(SpecDetail specDetail) {
 		
-		  final String sql = "update specDetail set specName=?,sortNo=?,updatedDate=now() where id=?";
+		  final String sql = "update specDetail set specName=?,sortNo=? where id=?";
 	        jdbcTemplate.update(
 	                sql,
 	                specDetail.getSpecName(),specDetail.getSortNo(),specDetail.getId());

@@ -75,13 +75,14 @@
 				selectOnCheck:false,
 				pageSize : 10,
 				pageList : [ 10, 20, 30, 40, 50, 100 ], 
-			    columns:[[  
+			    columns:[[ 
+			        
 			        {field:'specName',title:'规格值名称',width:100,editor:{type:'validatebox',options:{required:true,validType:'length[0,10]'}}},
 			        {field:'specId',title:'规格值图片',width:500,formatter:function(value, row, index) {
 		        		var html='';
 		        		html += '<iframe name="uploadframe" id="uploadframe'+index+'" height="20"';
 		        		html += 'frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"';
-		        		html += 'src="${pageContext.request.contextPath}/spec/toUploadPage?specId=${spec.id}"></iframe>';
+		        		html += 'src="${pageContext.request.contextPath}/spec/toUploadPage?specId=${spec.id}&id='+row.id+'"></iframe>';
 		        		return html;
 			        	
 					}},  
@@ -104,7 +105,7 @@
 			    	if(insObj!=null){
 			    		$.ajax({
 							url : '${pageContext.request.contextPath}/spec/updateSpecDetail?id='+insObj.id,  
-							data : row,
+							data : rowData,
 							type:'POST',
 							dataType : 'json',
 							success : function(data) {
@@ -154,16 +155,18 @@
 		/**
 		*	调用iframe中的方法
 		*/
-		function  uploadImg(data){
+		function  uploadImg(editIndex){
 			var frameid = 'uploadframe'+editIndex;
 			var ifr = document.getElementById(frameid);
 	    	var win = ifr.window || ifr.contentWindow;
-	    	win.upload(data); // 调用iframe中的a函数
+	    	win.upload(); // 调用iframe中的a函数
 		}
 		/**
 		*	iframe中的回调方法
 		*/
 		function callback(data){
+			console.info('callback');
+			console.info(data);
 			if(data!=null){
 				insObj=data.array;
 				if(data.status==0){
