@@ -63,7 +63,11 @@ public class SpecController extends BaseController {
 		String specId = request.getParameter("specId");
 		request.setAttribute("specId", specId);
 		String id = request.getParameter("id");
-		request.setAttribute("id", id);
+		if("undefined".equals(id)){
+			request.setAttribute("id",null);
+		}else{
+			request.setAttribute("id", id);
+		}
 		
     	return "spec/upload";
     }

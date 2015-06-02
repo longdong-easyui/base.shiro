@@ -128,7 +128,8 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 
 	@Override
 	public List<SpecDetail> findAllSpecDetail(SpecDetail detail) {
-		String sql = " select id,specId,specName,sortNo,available from specDetail ";
+		String sql = " select id,specId,specName,sortNo,available from specDetail  where 1=1 "
+				   + " and specId="+detail.getSpecId();
 			
 		List<SpecDetail> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper(SpecDetail.class));
 		

@@ -51,6 +51,9 @@
     			<td>
     				<a id="btn3" href="#" onclick="accept();" class="easyui-linkbutton" data-options="iconCls:'icon-add'">保存</a>
     			</td>
+    			<td>
+    				<a id="btn4" href="#" onclick="refresh();" class="easyui-linkbutton" data-options="iconCls:'icon-mini-refresh'">刷新</a>
+    			</td>
     		</tr>
     	</table>
 	</div>
@@ -117,7 +120,7 @@
 							}
 						}); 
 			    		editIndex = undefined;
-			    		specDetaildg.datagrid('load');
+			    		specDetaildg.datagrid('load',{specId:insObj.specId});
 			    	}
 				},
 			    onClickCell: function(index, field){
@@ -137,7 +140,9 @@
 		        }
 			}); 
 		});
-		
+		function refresh(){
+			specDetaildg.datagrid('load',{specId:'${spec.id}'});
+		}
 	     function endEditing(){
 	          if (editIndex == undefined){
 	        	  return true
@@ -160,11 +165,8 @@
 		*/
 		function  uploadImg(editIndex){
 			var frameid = 'uploadframe'+editIndex;
-			console.info(frameid);
 			var ifr = document.getElementById(frameid);
 	    	var win = ifr.window || ifr.contentWindow;
-	    	var fb = win.document.getElementById('fb').value;
-	    	console.info(fb);
 	    	win.upload(); // 调用iframe中的a函数
 		}
 		/**
@@ -173,6 +175,8 @@
 		function callback(data){
 			
 			insObj=data.array;
+			console.info('callback');
+			console.info(insObj);
 			 if(insObj!=null){
 				if(data.status==0){
 					 showMessage( '提示',data.desc);
