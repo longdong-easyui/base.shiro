@@ -192,23 +192,41 @@ public class SpecController extends BaseController {
 			writeJson(map, response);
 		}
 		
-		@RequestMapping("insertSpecDetail")
-		public void insertSpecDetail(SpecDetail specDetail,HttpServletRequest request,HttpServletResponse response){
+		@RequestMapping("editSpecDetail")
+		public void editSpecDetail(SpecDetail specDetail,HttpServletRequest request,HttpServletResponse response){
 			try {
-				logger.info("insertSpecDetail:"+JSON.toJSONString(specDetail));
+				logger.info("editSpecDetail:"+JSON.toJSONString(specDetail));
+				Long id = specDetail.getId();
 				
 				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;     
 				/**页面控件的文件流**/    
 		        MultipartFile multipartFile = multipartRequest.getFile("file");
+		        byte[] data =multipartFile.getBytes();
+		        specDetail.setSpecValue(data);
 		        
-		        specDetail.setSpecValue(multipartFile.getBytes());
-		        
-		        SpecDetail res = specService.createSpecDetail(specDetail);
-		        
-				Map<String,Object> map = new HashMap<String,Object>();
+		        Map<String,Object> map = new HashMap<String,Object>();
+		       
+			    if(id==null){ 
+			    	if(data.length>0){
+			    		SpecDetail res = specService.createSpecDetail(specDetail);
+					     map.put("array",res);
+					     map.put("desc","新增图片成功");
+			    	}else{
+			    		map.put("array",null);
+			    		map.put("desc","无新增图片");
+			    	}
+			       
+				}else{
+					if(data.length>0){
+						SpecDetail res = specService.updateImageByDetailId(specDetail);
+						 map.put("array",res);
+					     map.put("desc","更新图片成功");
+					}else{
+						 map.put("array",specDetail);
+						 map.put("desc","无更新图片");
+					}
+				}
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
-				map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
-				map.put("array",res);
 				writeJson(map,response);
 			} catch (Exception e) {
 				logger.error(e, e);

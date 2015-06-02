@@ -174,4 +174,15 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	                
 	        return specDetail;
 	}
+
+	@Override
+	public SpecDetail updateImageByDetailId(SpecDetail specDetail) {
+		
+		 final String sql = "update specDetail set specValue=? where id=?";
+	        jdbcTemplate.update(
+	                sql,
+	                specDetail.getSpecValue(),specDetail.getId());
+	                
+	        return specDetail;
+	}
 }

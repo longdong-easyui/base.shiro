@@ -121,7 +121,7 @@
 			    	}
 				},
 			    onClickCell: function(index, field){
-			    	
+			    	console.info(editIndex+':'+ index);
 			    	if(field != 'operate'){
 			    		 if (editIndex != index){
 				                if (endEditing()){
@@ -160,18 +160,20 @@
 		*/
 		function  uploadImg(editIndex){
 			var frameid = 'uploadframe'+editIndex;
+			console.info(frameid);
 			var ifr = document.getElementById(frameid);
 	    	var win = ifr.window || ifr.contentWindow;
+	    	var fb = win.document.getElementById('fb').value;
+	    	console.info(fb);
 	    	win.upload(); // 调用iframe中的a函数
 		}
 		/**
 		*	iframe中的回调方法
 		*/
 		function callback(data){
-			console.info('callback');
-			console.info(data);
-			if(data!=null){
-				insObj=data.array;
+			
+			insObj=data.array;
+			 if(insObj!=null){
 				if(data.status==0){
 					 showMessage( '提示',data.desc);
 					 if (editIndex != undefined){
@@ -182,7 +184,7 @@
 					 showMessage( '提示',data.desc);
 				}
 			}
-			
+			 
 		}
 		function cancelEdit(){
 	            if (editIndex == undefined){return}
