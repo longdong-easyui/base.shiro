@@ -1,9 +1,6 @@
 package com.longdong.entity;
 
-import java.io.Serializable;
 import java.util.List;
-
-import net.sf.json.JSONObject;
 
 
 
@@ -171,25 +168,5 @@ public class Resource extends BaseEntity{
                 ", available=" + available +
                 '}';
     }
-    public JSONObject toJSONObject(Resource r) {
-		Long pid = r.getParentId();
-		
-		JSONObject obj = new JSONObject();
-		obj.put("id", r.getId());
-		obj.put("name",r.getName());
-		obj.put("type",r.getType());
-		obj.put("url",r.getUrl());
-		obj.put("permission",r.getPermission());
-		obj.put("available",r.getAvailable());
-		obj.put("availableStr",r.getAvailableStr());
-		
-		if(pid != 0){
-			//前端 treegrid 获取的json格式中的父id的参数名称 
-			obj.put("_parentId",r.getParentId());
-		}
-		
-		return obj;
-		
-	}
-
+    
 }

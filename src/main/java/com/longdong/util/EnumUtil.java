@@ -1,13 +1,6 @@
 package com.longdong.util;
 
 
-
-
-/**
- * 
- * @author john
- *
- */
 public class EnumUtil {
 	
 	 /**

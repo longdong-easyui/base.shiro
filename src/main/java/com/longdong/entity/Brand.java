@@ -1,9 +1,5 @@
 package com.longdong.entity;
 
-import java.io.InputStream;
-
-import net.sf.json.JSONObject;
-
 /**
  * <p>User: 
  * <p>Date: 14-1-28
@@ -116,18 +112,5 @@ public class Brand extends BaseEntity{
         return id != null ? id.hashCode() : 0;
     }
 
-  
-    public JSONObject toJSONObject(Brand r) {
-    	
-		
-		JSONObject obj = new JSONObject();
-		obj.put("id", r.getId());
-		obj.put("name",r.getName());
-		obj.put("type",r.getName());
-		obj.put("available",r.getAvailable());
-		obj.put("availableStr",r.getAvailableStr());
-		
-		return obj;
-		
-	}
+
 }

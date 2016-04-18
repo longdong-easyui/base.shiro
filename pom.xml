@@ -8,10 +8,6 @@
 	<name>base.shiro.chapter16 Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
-	<properties>
-		<jdk_version>1.7</jdk_version>
-		<encode>UTF-8</encode>
-	</properties>
 	<!-- 中央仓库 -->
 	<repositories>
 		<repository>
@@ -34,7 +30,14 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-
+		<repository>
+			<id>jboss</id>
+			<name>jboss</name>
+			<url>http://repository.jboss.com/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -179,13 +182,9 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.1.39</version>
+			<version>1.2.8</version>
 		</dependency>
-		<dependency>
-			<groupId>net.sf.json-lib</groupId>
-			<artifactId>json-lib</artifactId>
-			<version>2.3</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>net.sf.ezmorph</groupId>
 			<artifactId>ezmorph</artifactId>
@@ -220,36 +219,19 @@
 	<build>
 		<finalName>base.shiro</finalName>
 		<plugins>
-			<!-- 编译的时候使用JDK6和UTF8编码 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<source>${jdk_version}</source>
-					<target>${jdk_version}</target>
-					<encoding>${encode}</encoding>
-				</configuration>
-			</plugin>
-			<!-- 编译jar包 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<addMavenDescriptor>false</addMavenDescriptor>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-			<!-- 配置Maven插件(mvn jetty:run可以运行项目) -->
+			 <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <version>3.5.1</version>
+		        <configuration>
+		          <source>1.8.0_73</source>
+		          <target>1.8.0_73</target>
+		        </configuration>
+		      </plugin>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-
+ 				<version>9.3.7.v20160115</version>
 				<configuration>
 					<httpConnector>
 						<port>9999</port>

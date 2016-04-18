@@ -1,7 +1,5 @@
 package com.longdong.entity;
 
-import net.sf.json.JSONObject;
-
 /**
  * <p>User: 
  * <p>Date: 14-1-28
@@ -76,15 +74,4 @@ public class Spec extends BaseEntity{
     }
 
   
-    public JSONObject toJSONObject(Spec r) {
-    	
-		
-		JSONObject obj = new JSONObject();
-		obj.put("id", r.getId());
-		obj.put("name",r.getName());
-		obj.put("type",r.getType());
-		
-		return obj;
-		
-	}
 }
