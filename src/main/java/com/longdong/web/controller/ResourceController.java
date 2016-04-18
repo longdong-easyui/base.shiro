@@ -11,9 +11,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -26,20 +23,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSON;
 import com.longdong.entity.Resource;
-import com.longdong.entity.User;
 import com.longdong.entity.Resource.ResourceType;
+import com.longdong.entity.User;
 import com.longdong.service.ResourceService;
 import com.longdong.service.UserService;
 import com.longdong.util.EnumUtil;
 import com.longdong.web.bind.annotaion.CurrentUser;
 
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-14
- * <p>Version: 1.0
- */
+
 @Controller
 @RequestMapping("/resource")
 public class ResourceController extends BaseController{
@@ -234,17 +228,10 @@ public class ResourceController extends BaseController{
 		resource.setRows(total);
 		List<Resource> list = resourceService.findAllResource(resource);
 		
-		JSONArray arr = new JSONArray();
-    	for (int i = 0; i < list.size(); i++) {
-    		Resource r= list.get(i);
-    		JSONObject obj = r.toJSONObject(r);
-    		arr.add(obj);
-		}
-    	
-		JSONObject obj = new JSONObject();
-		obj.put("total",total);
-		obj.put("rows",arr);
-		String json = obj.toString();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("total",total);
+		map.put("rows",list);
+		String json = JSON.toJSONString(map);
 		
 		logger.info(">>>>>>>>>>>>转换后的JSON字符串：" + json);
 		response.setContentType("text/html;charset=utf-8");
@@ -290,16 +277,21 @@ public class ResourceController extends BaseController{
 	public void getResourceTypeList(HttpServletResponse response){
 		ResourceType[] rt = ResourceType.values();
 		List<ResourceType> list = Arrays.asList(rt);
-		JSONArray arr = new JSONArray();
-		for(ResourceType type : list){
-			JSONObject obj = new JSONObject();
-			String name = type.name();
-			String info = type.getInfo();
-			obj.put("name",name);
-			obj.put("value",info);
-			arr.add(obj);
+		
+		try {
+			String json;
+			
+			//json = JSON.toJSONString(object,SerializerFeature.WriteDateUseDateFormat);
+			json = JSON.toJSONStringWithDateFormat(list,"yyyy-MM-dd");
+			
+			logger.info(">>>>>>>>>>>>转换后的JSON字符串：" + json);
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().write(json);
+			response.getWriter().flush();
+			response.getWriter().close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		writeJson(arr,response);
 	}
     
     

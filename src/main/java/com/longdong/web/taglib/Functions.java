@@ -12,11 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-15
- * <p>Version: 1.0
- */
+
 public class Functions {
 
     public static boolean in(Iterable iterable, Object element) {

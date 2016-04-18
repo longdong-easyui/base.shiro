@@ -1,7 +1,6 @@
 package com.longdong.web.controller;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,16 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.longdong.entity.Organization;
-import com.longdong.entity.User;
-import com.longdong.service.OrganizationService;
-import com.longdong.util.EnumUtil;
-import com.longdong.web.bind.annotaion.CurrentUser;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -32,11 +21,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-14
- * <p>Version: 1.0
- */
+import com.alibaba.fastjson.JSON;
+import com.longdong.entity.Organization;
+import com.longdong.service.OrganizationService;
+import com.longdong.util.EnumUtil;
+
+
 @Controller
 @RequestMapping("/organization")
 public class OrganizationController extends BaseController{
@@ -247,17 +237,10 @@ public class OrganizationController extends BaseController{
 		organization.setRows(total);
 		List<Organization> list = organizationService.findAllOrganization(organization);
 		
-		JSONArray arr = new JSONArray();
-    	for (int i = 0; i < list.size(); i++) {
-    		Organization r= list.get(i);
-    		JSONObject obj = r.toJSONObject(r);
-    		arr.add(obj);
-		}
-    	
-		JSONObject obj = new JSONObject();
-		obj.put("total",total);
-		obj.put("rows",arr);
-		String json = obj.toString();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("total",total);
+		map.put("rows",list);
+		String json = JSON.toJSONString(map);
 		
 		logger.info(">>>>>>>>>>>>转换后的JSON字符串：" + json);
 		response.setContentType("text/html;charset=utf-8");

@@ -2,11 +2,7 @@ package com.longdong.web.editor;
 
 import java.beans.PropertyEditorSupport;
 import org.springframework.util.StringUtils;
-/**
- * 
- * @author john int  类型转换器
- *
- */
+
 public class IntegerEditor extends PropertyEditorSupport  {
 		@Override
 		public void setAsText(String text) throws IllegalArgumentException {

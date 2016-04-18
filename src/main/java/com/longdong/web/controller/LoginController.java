@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.longdong.entity.User;
 import com.longdong.service.UserService;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-15
- * <p>Version: 1.0
- */
+
 @Controller
 public class LoginController {
 	@Autowired

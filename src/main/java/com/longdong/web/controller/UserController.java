@@ -28,11 +28,7 @@ import com.longdong.service.RoleService;
 import com.longdong.service.UserService;
 import com.longdong.util.EnumUtil;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-14
- * <p>Version: 1.0
- */
+
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController{
