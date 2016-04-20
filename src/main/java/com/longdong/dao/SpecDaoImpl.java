@@ -139,7 +139,7 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	@Override
 	public SpecDetail createSpecDetail(final SpecDetail specDetail) {
 		
-		 final String sql = "insert into SpecDetail(specId,specName,specValue,havImg,sortNo) values(?,?,?,?)";
+		 final String sql = "insert into SpecDetail(specId,specName,specValue,havImg,sortNo) values(?,?,?,?,?)";
 
 	        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 	        jdbcTemplate.update(new PreparedStatementCreator() {
@@ -167,25 +167,25 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	}
 
 	@Override
-	public SpecDetail updateSpecDetail(SpecDetail specDetail) {
+	public int updateSpecDetail(SpecDetail specDetail) {
 		
 		  final String sql = "update specDetail set specName=?,havImg=?,sortNo=? where id=?";
-	        jdbcTemplate.update(
+	      int updateRow =  jdbcTemplate.update(
 	                sql,
 	                specDetail.getSpecName(),specDetail.getHavImg(),specDetail.getSortNo(),specDetail.getId());
 	                
-	        return specDetail;
+	        return updateRow;
 	}
 
 	@Override
-	public SpecDetail updateImageByDetailId(SpecDetail specDetail) {
+	public int updateImageByDetailId(SpecDetail specDetail) {
 		
-		 final String sql = "update specDetail set specValue=? where id=?";
-	        jdbcTemplate.update(
+		 final String sql = "update specDetail set specValue=?,havImg=? where id=?";
+	     int updateRow = jdbcTemplate.update(
 	                sql,
-	                specDetail.getSpecValue(),specDetail.getId());
+	                specDetail.getSpecValue(),specDetail.getHavImg(),specDetail.getId());
 	                
-	        return specDetail;
+	        return updateRow;
 	}
 
 	@Override

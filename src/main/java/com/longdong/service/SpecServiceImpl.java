@@ -75,13 +75,13 @@ public class SpecServiceImpl implements SpecService {
 	}
 
 	@Override
-	public SpecDetail updateSpecDetail(SpecDetail specDetail) {
+	public int updateSpecDetail(SpecDetail specDetail) {
 		return specDao.updateSpecDetail(specDetail);
 		
 	}
 
 	@Override
-	public SpecDetail updateImageByDetailId(SpecDetail specDetail) {
+	public int updateImageByDetailId(SpecDetail specDetail) {
 		
 		return specDao.updateImageByDetailId(specDetail);
 	}

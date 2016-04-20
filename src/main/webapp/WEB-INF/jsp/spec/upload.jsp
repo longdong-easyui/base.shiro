@@ -7,8 +7,10 @@
 <%@ include file="/WEB-INF/jsp/taglib.jsp" %>
 </head>
 <body>
+	<br/><br/><br/><br/>
 	<form method="post" id="uploadForm" enctype="multipart/form-data">
 		<input id="fb" type="text" style="width:300px" name="file" >
+		
 		<input type="hidden" name="specId" id="i_specId" value="${specId}">
 		<input type="hidden" name="sortNo" id="i_sortNo" value="0">
 		<input type="hidden" name="id" id="i_id" value="${id}">
@@ -20,6 +22,7 @@
 		    buttonText: '选择文件', 
 		    buttonAlign: 'right' 
 		});
+		/*
 		function upload(){
 			console.info('upload img');
 			$('#uploadForm').form('submit', { 
@@ -34,8 +37,7 @@
 			    	
 			    }    
 			});
-			
-		}
+		}*/
 	</script>
 </body>
 </html>

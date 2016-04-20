@@ -25,7 +25,7 @@ public interface SpecDao {
 	public List<SpecDetail> findAllSpecDetail(SpecDetail detail);
 	public SpecDetail createSpecDetail(SpecDetail specDetail);
 	public boolean deleteSpecDetailById(Long id);
-	public SpecDetail updateSpecDetail(SpecDetail specDetail);
-	public SpecDetail updateImageByDetailId(SpecDetail specDetail);
+	public int updateSpecDetail(SpecDetail specDetail);
+	public int updateImageByDetailId(SpecDetail specDetail);
 	public SpecDetail findSpecDetailOne(Long id);
 }

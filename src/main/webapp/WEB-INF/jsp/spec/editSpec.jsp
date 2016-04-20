@@ -57,6 +57,7 @@
     		</tr>
     	</table>
 	</div>
+	
 	<div data-options="region:'center',title:'center title'" style="padding:5px;background:#eee;">
 		   <table id="specDetaildg"  style="width:800px;height:auto"></table> 
 	</div> 
@@ -79,17 +80,9 @@
 				pageList : [ 10, 20, 30, 40, 50, 100 ], 
 			    columns:[[ 
 			        
-			        {field:'specName',title:'规格值名称',width:100,editor:{type:'validatebox',options:{required:true,validType:'length[0,10]'}}},
-			        {field:'specId',title:'规格值图片',width:500,formatter:function(value, row, index) {
-			        	console.info(row.id);
-		        		var html='';
-		        		html += '<iframe name="uploadframe" id="uploadframe'+index+'" height="20"';
-		        		html += 'frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"';
-		        		html += 'src="${pageContext.request.contextPath}/spec/toUploadPage?specId=${spec.id}'+'&id='+row.id+'"></iframe>';
-		        		return html;
-			        	
-					}},  
-					{field:'img',title:'图片',width:100,formatter:function(value, row, index) {
+			        {field:'specName',title:'规格值名称',width:100,editor:{type:'validatebox',options:{required:true,validType:'length[0,10]'}}},			        
+			        {field:'sortNo',title:'排序',width:50,editor:{type:'numberbox',options:{precision:0}}},
+			        {field:'img',title:'图片',width:100,formatter:function(value, row, index) {
 						var html="";
 						var havImg =row.havImg;
 						if(havImg==1){
@@ -97,10 +90,12 @@
 						}
 		        		return html;
 					}},
-			        {field:'sortNo',title:'排序',width:50,editor:{type:'numberbox',options:{precision:0}}},
+			        {field:'specId',title:'specId',width:500,hidden:true},  
 			        {field:'operate',title:'操作',width:300,formatter:function(value, row, index) {
-			        	var html = "<a href='#' onclick='removeit("+row.id+","+index+")'>删除</a>";
-			        	        
+			        	var html="<a href='#' onclick='removeit("+row.id+","+index+")'>删除</a>";
+			        	if(row.specName != ''){
+			        		html += " | <a href='#' onclick='showUpload("+row.id+")'>上传图片</a>";
+			        	}       
 						return html;
 					}}, 
 			    ]],
@@ -169,43 +164,11 @@
 	     }
 		 function accept(){
 			 
-			 uploadImg(editIndex);
 			 if(endEditing()){
 				 specDetaildg.datagrid('endEdit', editIndex);
 			 }
 	    }
-		/**
-		*	调用iframe中的方法
-		*/
-		function  uploadImg(editIndex){
-			var frameid = 'uploadframe'+editIndex;
-			console.info(frameid);
-			var ifr = document.getElementById(frameid);
-			console.info(ifr);
-	    	var win = ifr.window || ifr.contentWindow;
-	    	win.upload(); // 调用iframe中的a函数
-		}
-		/**
-		*	iframe中的回调方法
-		*/
-		function callback(data){
-			console.info('callback');
-			console.info(data);
-			if(data==null){
-				return;
-			}
-			var insObj=data.array;
-			console.info(insObj);
-			 if(insObj!=null){
-				if(data.status==0){
-					 showMessage( '提示',data.desc);
-					 
-				}else{
-					 showMessage( '提示',data.desc);
-				}
-			}
-			
-		}
+		
 		function cancelEdit(){
 	            if (editIndex == undefined){return}
 	            specDetaildg.datagrid('cancelEdit', editIndex);
@@ -230,6 +193,80 @@
 			 }else{
 				 specDetaildg.datagrid('cancelEdit', index).datagrid('deleteRow', index);
 			 }
+		}
+		var uploadDialog;
+		function showUpload(rowId){
+			
+			uploadDialog = $("<div/>").dialog({
+				title: '上传图片',    
+			    width: 500,    
+			    height:200,    
+			    closed: false,    
+			    cache: false,    
+			    href: '${pageContext.request.contextPath}/spec/toUploadPage?id='+rowId,    
+			    modal: true,
+			    buttons : [ {
+					text : '上传图片',
+					handler : function() {
+						$('#uploadForm').form('submit', {   
+								url: '${pageContext.request.contextPath}/spec/editSpecDetail',  
+							    success: function(data){ 
+							    	var json=$.parseJSON(data); 
+							        if (json.status==0){
+							        	refresh();
+							        	//消息提示 
+							            showMessage('提示',json.desc);
+							        }else{
+							        	showMessage('提示',json.desc);
+							        }  
+							        //关闭弹出窗
+						        	uploadDialog.dialog('close');
+							    }    
+							}); 
+					}
+				}],
+				onClose:function(){
+					//在窗口关闭之后触发
+					uploadDialog.dialog('destroy');
+				}
+				  
+			});
+			
+		}
+		
+		/////////////////////////////////////////////////////////////
+		
+		/**
+		*	调用iframe中的方法,方法废弃不用了
+		*/
+		function  uploadImg(editIndex){
+			var frameid = 'uploadframe'+editIndex;
+			console.info(frameid);
+			var ifr = document.getElementById(frameid);
+			console.info(ifr);
+	    	var win = ifr.window || ifr.contentWindow;
+	    	win.upload(); // 调用iframe中的a函数
+		}
+		/**
+		*	iframe中的回调方法，方法废弃不用了
+		*/
+		function callback(data){
+			console.info('callback');
+			console.info(data);
+			if(data==null){
+				return;
+			}
+			var insObj=data.array;
+			console.info(insObj);
+			 if(insObj!=null){
+				if(data.status==0){
+					 showMessage( '提示',data.desc);
+					 
+				}else{
+					 showMessage( '提示',data.desc);
+				}
+			}
+			
 		}
 	</script>
 </body> 

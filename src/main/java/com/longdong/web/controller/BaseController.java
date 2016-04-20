@@ -41,7 +41,7 @@ public class BaseController{
 			//json = JSON.toJSONString(object,SerializerFeature.WriteDateUseDateFormat);
 			json = JSON.toJSONStringWithDateFormat(object,"yyyy-MM-dd");
 			
-			logger.info(">>>>>>>>>>>>转换后的JSON字符串：" + json);
+			logger.info("response json:" + json);
 			response.setContentType("text/html;charset=utf-8");
 			response.getWriter().write(json);
 			response.getWriter().flush();

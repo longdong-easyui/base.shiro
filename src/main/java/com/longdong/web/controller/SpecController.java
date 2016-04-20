@@ -202,7 +202,6 @@ public class SpecController extends BaseController {
 		public void editSpecDetail(SpecDetail specDetail,HttpServletRequest request,HttpServletResponse response){
 			try {
 				logger.info("editSpecDetail:"+JSON.toJSONString(specDetail));
-				Long id = specDetail.getId();
 				
 				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;     
 				/**页面控件的文件流**/    
@@ -212,25 +211,11 @@ public class SpecController extends BaseController {
 		        specDetail.setHavImg(1);
 		        Map<String,Object> map = new HashMap<String,Object>();
 		       
-			    if(id==null){ 
-			    	if(data.length>0){
-			    		SpecDetail res = specService.createSpecDetail(specDetail);
-					     map.put("array",res);
-					     map.put("desc","新增图片成功");
-			    	}else{
-			    		map.put("array",null);
-			    		map.put("desc","无新增图片");
-			    	}
-			       
+				if(data.length>0){
+					 int updateRow = specService.updateImageByDetailId(specDetail);
+				     map.put("desc","更新图片成功");
 				}else{
-					if(data.length>0){
-						SpecDetail res = specService.updateImageByDetailId(specDetail);
-						 map.put("array",res);
-					     map.put("desc","更新图片成功");
-					}else{
-						 map.put("array",specDetail);
-						 map.put("desc","无更新图片");
-					}
+					 map.put("desc","无更新图片");
 				}
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
 				writeJson(map,response);
@@ -254,7 +239,7 @@ public class SpecController extends BaseController {
 				if(sd==null){
 					//不存在
 					specDetail.setId(null);
-					 specDetail.setHavImg(0);  //0:无图片，1：有图片
+					specDetail.setHavImg(0);  //0:无图片，1：有图片
 					SpecDetail newsd = specService.createSpecDetail(specDetail);
 					Map<String,Object> map = new HashMap<String,Object>();
 					map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
@@ -263,12 +248,12 @@ public class SpecController extends BaseController {
 					writeJson(map,response);
 				}else{
 					//存在
-					SpecDetail detail = specService.updateSpecDetail(specDetail);
+					int updateRow= specService.updateSpecDetail(specDetail);
 					
 					Map<String,Object> map = new HashMap<String,Object>();
 					map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
 					map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
-					map.put("array",detail);
+					map.put("array",specDetail);
 					writeJson(map,response);
 				}
 				
