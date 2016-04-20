@@ -85,4 +85,10 @@ public class SpecServiceImpl implements SpecService {
 		
 		return specDao.updateImageByDetailId(specDetail);
 	}
+
+	@Override
+	public SpecDetail findSpecDetailOne(Long id) {
+		
+		return specDao.findSpecDetailOne(id);
+	}
 }

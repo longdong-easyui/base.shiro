@@ -21,6 +21,7 @@
 		    buttonAlign: 'right' 
 		});
 		function upload(){
+			console.info('upload img');
 			$('#uploadForm').form('submit', { 
 				url : '${pageContext.request.contextPath}/spec/editSpecDetail', 
 			    success: function(data){ 

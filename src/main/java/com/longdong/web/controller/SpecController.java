@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.longdong.entity.Spec;
 import com.longdong.entity.SpecDetail;
 import com.longdong.service.SpecService;
@@ -53,8 +52,10 @@ public class SpecController extends BaseController {
 	 @RequestMapping("toEditSpecPage")
 	 public String toEditSpecPage(HttpServletRequest request){
 		 String id = request.getParameter("id");
+		
 		 Spec spec = specService.findOne(Long.valueOf(id));
 		 request.setAttribute("spec",spec);
+		 
 	     return "spec/editSpec";
 	 }
 	 
@@ -156,6 +157,7 @@ public class SpecController extends BaseController {
 		public void findImgById(Long id,HttpServletResponse response){
 			logger.info("findImgById.start");
 			try {
+
 				Map<String,InputStream> map= specService.findImgById(id);
 				InputStream ins = map.get("specImg");
 				 //文件流        
@@ -207,7 +209,7 @@ public class SpecController extends BaseController {
 		        MultipartFile multipartFile = multipartRequest.getFile("file");
 		        byte[] data =multipartFile.getBytes();
 		        specDetail.setSpecValue(data);
-		        
+		        specDetail.setHavImg(1);
 		        Map<String,Object> map = new HashMap<String,Object>();
 		       
 			    if(id==null){ 
@@ -244,15 +246,32 @@ public class SpecController extends BaseController {
 		public void updateSpecDetail(SpecDetail specDetail,HttpServletRequest request,HttpServletResponse response){
 			
 			try {
-				String id = request.getParameter("id");
-				specDetail.setId(Long.valueOf(id));
-				SpecDetail detail = specService.updateSpecDetail(specDetail);
+				String specId = request.getParameter("specId");
+				specDetail.setSpecId(Long.valueOf(specId));
 				
-				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
-				map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
-				map.put("array",detail);
-				writeJson(map,response);
+				Long id = specDetail.getId();
+				SpecDetail sd = specService.findSpecDetailOne(id);
+				if(sd==null){
+					//不存在
+					specDetail.setId(null);
+					 specDetail.setHavImg(0);  //0:无图片，1：有图片
+					SpecDetail newsd = specService.createSpecDetail(specDetail);
+					Map<String,Object> map = new HashMap<String,Object>();
+					map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
+					map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
+					map.put("array",newsd);
+					writeJson(map,response);
+				}else{
+					//存在
+					SpecDetail detail = specService.updateSpecDetail(specDetail);
+					
+					Map<String,Object> map = new HashMap<String,Object>();
+					map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
+					map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
+					map.put("array",detail);
+					writeJson(map,response);
+				}
+				
 			} catch (Exception e) {
 				logger.error(e, e);
 				Map<String,Object> map = new HashMap<String,Object>();
@@ -261,6 +280,7 @@ public class SpecController extends BaseController {
 				writeJson(map,response);
 			}
 		}
+		
 		@RequestMapping("uploadImg")
 		public void uploadImg(HttpServletRequest request,HttpServletResponse response){
 			Map<String,Object> map = new HashMap<String,Object>();
@@ -281,6 +301,7 @@ public class SpecController extends BaseController {
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",EnumUtil.RETURN_JSON_STATUS.FAILURE.value);
 			}
+			
 			writeJson(map,response);
 		}
 }

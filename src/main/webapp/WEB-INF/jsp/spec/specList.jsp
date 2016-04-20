@@ -151,7 +151,7 @@
 			function editFun(){
 				//首先判断是否有勾选记录
 				var rows = specdg.datagrid('getChecked');
-				
+			//	console.info(rows);
 				//获取编辑行的索引值，用于编辑成功后直接更新该行的数据
 				var rowindex = specdg.datagrid('getRowIndex',rows[0]);
 				if(rows.length==1){

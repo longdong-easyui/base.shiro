@@ -63,9 +63,8 @@
  	<script type="text/javascript">
 		var specDetaildg;
 		var editIndex = undefined;
-		var insObj;
+		
 		$(function(){
-			
 			specDetaildg = $('#specDetaildg').datagrid({ 
 				fitColumns:true,
 				idField:'id', 
@@ -82,20 +81,27 @@
 			        
 			        {field:'specName',title:'规格值名称',width:100,editor:{type:'validatebox',options:{required:true,validType:'length[0,10]'}}},
 			        {field:'specId',title:'规格值图片',width:500,formatter:function(value, row, index) {
+			        	console.info(row.id);
 		        		var html='';
 		        		html += '<iframe name="uploadframe" id="uploadframe'+index+'" height="20"';
 		        		html += 'frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"';
-		        		html += 'src="${pageContext.request.contextPath}/spec/toUploadPage?specId=${spec.id}&id='+row.id+'"></iframe>';
+		        		html += 'src="${pageContext.request.contextPath}/spec/toUploadPage?specId=${spec.id}'+'&id='+row.id+'"></iframe>';
 		        		return html;
 			        	
 					}},  
 					{field:'img',title:'图片',width:100,formatter:function(value, row, index) {
-						var img = "<img style='height:20;' src='${pageContext.request.contextPath}/spec/findImgById?id="+row.id+"'/>";
-		        		return img;
+						var html="";
+						var havImg =row.havImg;
+						if(havImg==1){
+							html = "<img style='height:20;' src='${pageContext.request.contextPath}/spec/findImgById?id="+row.id+"'/>";
+						}
+		        		return html;
 					}},
 			        {field:'sortNo',title:'排序',width:50,editor:{type:'numberbox',options:{precision:0}}},
 			        {field:'operate',title:'操作',width:300,formatter:function(value, row, index) {
-						return "<a href='#' onclick='removeit("+row.id+","+index+")'>删除</a>";
+			        	var html = "<a href='#' onclick='removeit("+row.id+","+index+")'>删除</a>";
+			        	        
+						return html;
 					}}, 
 			    ]],
 			    toolbar: '#specDetail_toolbar',
@@ -104,27 +110,27 @@
 			    },
 			    onAfterEdit:function(rowIndex, rowData, changes){
 			    	console.info('onAfterEdit');
-			    	console.info(insObj);
-			    	if(insObj!=null){
-			    		$.ajax({
-							url : '${pageContext.request.contextPath}/spec/updateSpecDetail?id='+insObj.id,  
-							data : rowData,
-							type:'POST',
-							dataType : 'json',
-							success : function(data) {
-								 if(data.status==0){
-								  	showMessage( '提示',data.desc);
-								 }else{
-								 	showMessage( '提示',data.desc);
-								 }
-							}
-						}); 
-			    		editIndex = undefined;
-			    		specDetaildg.datagrid('load',{specId:insObj.specId});
-			    	}
+			    	console.info(rowData);
+		    		$.ajax({
+						url : '${pageContext.request.contextPath}/spec/updateSpecDetail?specId=${spec.id}',  
+						data : rowData,
+						type:'POST',
+						dataType : 'json',
+						success : function(data) {
+							 if(data.status==0){
+							  	showMessage( '提示',data.desc);
+							 }else{
+							 	showMessage( '提示',data.desc);
+							 }
+							 console.info('刷新');
+							 refresh();
+						}
+					}); 
+		    		editIndex = undefined;
+		    		
 				},
 			    onClickCell: function(index, field){
-			    	console.info(editIndex+':'+ index);
+			    	//console.info(editIndex+':'+ index);
 			    	if(field != 'operate'){
 			    		 if (editIndex != index){
 				                if (endEditing()){
@@ -143,11 +149,16 @@
 		function refresh(){
 			specDetaildg.datagrid('load',{specId:'${spec.id}'});
 		}
-	     function endEditing(){
-	          if (editIndex == undefined){
-	        	  return true
-	          }  
-	     }
+		function endEditing(){
+            if (editIndex == undefined){return true}
+            if (specDetaildg.datagrid('validateRow', editIndex)){
+            	specDetaildg.datagrid('endEdit', editIndex);
+                editIndex = undefined;
+                return true;
+            } else {
+                return false;
+            }
+        }
 		 function append(){
 			
 			 if (endEditing()){
@@ -157,15 +168,20 @@
 			 }
 	     }
 		 function accept(){
+			 
 			 uploadImg(editIndex);
-	        
+			 if(endEditing()){
+				 specDetaildg.datagrid('endEdit', editIndex);
+			 }
 	    }
 		/**
 		*	调用iframe中的方法
 		*/
 		function  uploadImg(editIndex){
 			var frameid = 'uploadframe'+editIndex;
+			console.info(frameid);
 			var ifr = document.getElementById(frameid);
+			console.info(ifr);
 	    	var win = ifr.window || ifr.contentWindow;
 	    	win.upload(); // 调用iframe中的a函数
 		}
@@ -173,22 +189,22 @@
 		*	iframe中的回调方法
 		*/
 		function callback(data){
-			
-			insObj=data.array;
 			console.info('callback');
+			console.info(data);
+			if(data==null){
+				return;
+			}
+			var insObj=data.array;
 			console.info(insObj);
 			 if(insObj!=null){
 				if(data.status==0){
 					 showMessage( '提示',data.desc);
-					 if (editIndex != undefined){
-			            	//更新成功后，关闭编辑行
-							specDetaildg.datagrid('endEdit', editIndex);
-			         } 
+					 
 				}else{
 					 showMessage( '提示',data.desc);
 				}
 			}
-			 
+			
 		}
 		function cancelEdit(){
 	            if (editIndex == undefined){return}

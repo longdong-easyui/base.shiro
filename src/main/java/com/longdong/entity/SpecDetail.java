@@ -12,6 +12,7 @@ public class SpecDetail extends BaseEntity{
     private String specName; 
    
     private byte[] specValue;
+    private Integer havImg;
     private Integer sortNo;
    
    
@@ -45,6 +46,14 @@ public class SpecDetail extends BaseEntity{
 
 	public void setSpecValue(byte[] specValue) {
 		this.specValue = specValue;
+	}
+
+	public Integer getHavImg() {
+		return havImg;
+	}
+
+	public void setHavImg(Integer havImg) {
+		this.havImg = havImg;
 	}
 
 	public Integer getSortNo() {

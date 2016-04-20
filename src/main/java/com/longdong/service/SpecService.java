@@ -26,6 +26,7 @@ public interface SpecService {
 	public boolean deleteSpecDetailById(Long id);
 	public SpecDetail updateSpecDetail(SpecDetail specDetail);
 	public SpecDetail updateImageByDetailId(SpecDetail specDetail);
+	public SpecDetail findSpecDetailOne(Long id);
 	
 	
 	

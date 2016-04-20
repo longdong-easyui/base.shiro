@@ -128,7 +128,7 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 
 	@Override
 	public List<SpecDetail> findAllSpecDetail(SpecDetail detail) {
-		String sql = " select id,specId,specName,sortNo,available from specDetail  where 1=1 "
+		String sql = " select id,specId,specName,havImg,sortNo,available from specDetail  where 1=1 "
 				   + " and specId="+detail.getSpecId();
 			
 		List<SpecDetail> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper(SpecDetail.class));
@@ -139,7 +139,7 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	@Override
 	public SpecDetail createSpecDetail(final SpecDetail specDetail) {
 		
-		 final String sql = "insert into SpecDetail(specId,specName,specValue,sortNo) values(?,?,?,?)";
+		 final String sql = "insert into SpecDetail(specId,specName,specValue,havImg,sortNo) values(?,?,?,?)";
 
 	        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 	        jdbcTemplate.update(new PreparedStatementCreator() {
@@ -150,6 +150,7 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	                psst.setLong(count++, specDetail.getSpecId());
 	                psst.setString(count++, specDetail.getSpecName());
 	                psst.setBytes(count++,specDetail.getSpecValue());
+	                psst.setInt(count++,specDetail.getHavImg());
 	                psst.setInt(count++, specDetail.getSortNo());
 	                return psst;
 	            }
@@ -168,10 +169,10 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	@Override
 	public SpecDetail updateSpecDetail(SpecDetail specDetail) {
 		
-		  final String sql = "update specDetail set specName=?,sortNo=? where id=?";
+		  final String sql = "update specDetail set specName=?,havImg=?,sortNo=? where id=?";
 	        jdbcTemplate.update(
 	                sql,
-	                specDetail.getSpecName(),specDetail.getSortNo(),specDetail.getId());
+	                specDetail.getSpecName(),specDetail.getHavImg(),specDetail.getSortNo(),specDetail.getId());
 	                
 	        return specDetail;
 	}
@@ -185,5 +186,18 @@ public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
 	                specDetail.getSpecValue(),specDetail.getId());
 	                
 	        return specDetail;
+	}
+
+	@Override
+	public SpecDetail findSpecDetailOne(Long id) {
+		 final String sql = "select id,specId,specName,specValue,havImg,sortNo from SpecDetail where id=?";
+	       
+	        @SuppressWarnings("unchecked")
+			List<SpecDetail> specDetailList = jdbcTemplate.query(sql,new BeanPropertyRowMapper(SpecDetail.class),id);
+	        if(specDetailList.size() == 0) {
+	            return null;
+	        }
+	        
+	        return specDetailList.get(0);
 	}
 }
