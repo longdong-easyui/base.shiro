@@ -11,11 +11,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-14
- * <p>Version: 1.0
- */
+
 @Service
 public class SpecServiceImpl implements SpecService {
     @Autowired

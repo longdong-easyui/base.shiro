@@ -16,11 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * <p>Role: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
+
 @Repository
 public class RoleDaoImpl extends BaseDaoImpl implements RoleDao {
 

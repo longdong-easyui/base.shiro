@@ -8,11 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-2-14
- * <p>Version: 1.0
- */
+
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
     @Autowired

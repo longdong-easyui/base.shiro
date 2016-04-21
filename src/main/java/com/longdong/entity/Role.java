@@ -1,17 +1,5 @@
 package com.longdong.entity;
 
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
 public class Role extends BaseEntity {
     private Long id; //编号
     private String role; //角色标识 程序中判断使用,如"admin"

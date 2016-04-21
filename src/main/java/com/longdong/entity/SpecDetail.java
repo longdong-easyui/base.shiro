@@ -1,11 +1,7 @@
 package com.longdong.entity;
 
 
-/**
- * <p>User: 
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
+
 public class SpecDetail extends BaseEntity{
     private Long id; 
     private Long specId;

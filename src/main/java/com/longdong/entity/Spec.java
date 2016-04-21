@@ -1,10 +1,5 @@
 package com.longdong.entity;
 
-/**
- * <p>User: 
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
 public class Spec extends BaseEntity{
     private Long id; //编号
     private String name; //规格名称

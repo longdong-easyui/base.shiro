@@ -22,11 +22,7 @@ import org.springframework.stereotype.Repository;
 import com.longdong.entity.Spec;
 import com.longdong.entity.SpecDetail;
 
-/**
- * <p>Spec: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
+
 @Repository
 public class SpecDaoImpl extends BaseDaoImpl implements SpecDao {
     

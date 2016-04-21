@@ -17,11 +17,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-/**
- * <p>User: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
+
 @Repository
 public class UserDaoImpl extends BaseDaoImpl implements UserDao {
 

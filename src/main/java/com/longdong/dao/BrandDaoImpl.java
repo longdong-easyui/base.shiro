@@ -21,11 +21,7 @@ import org.springframework.stereotype.Repository;
 
 import com.longdong.entity.Brand;
 
-/**
- * <p>Brand: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
+
 @Repository
 public class BrandDaoImpl extends BaseDaoImpl implements BrandDao {
     

@@ -1,24 +1,24 @@
 package com.longdong.entity;
 
+import java.util.List;
 
-public class Brand extends BaseEntity{
-    private Long id; //编号
-    private String name; //品牌名称
-    private Integer type; //类型
-    private byte[] logo;
+
+public class Column extends BaseEntity{
+    private Integer id; //编号
+    private Integer parentId;	//父id
+    private String name; //栏目名称   
     private String url;
     private Integer sortNo;
-    private String content;	//内容
-    
     private Integer available ;			//0:可用，1：禁用
     private String availableStr;
    
+   private List<Column> children;
    
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -29,15 +29,7 @@ public class Brand extends BaseEntity{
     public void setName(String name) {
         this.name = name;
     }
-    
-    public byte[] getLogo() {
-		return logo;
-	}
-
-	public void setLogo(byte[] logo) {
-		this.logo = logo;
-	}
-
+   
 	public String getUrl() {
 		return url;
 	}
@@ -75,20 +67,21 @@ public class Brand extends BaseEntity{
 		this.availableStr = availableStr;
 	}
 
-    public Integer getType() {
-		return type;
+
+	public Integer getParentId() {
+		return parentId;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
 	}
 
-	public String getContent() {
-		return content;
+	public List<Column> getChildren() {
+		return children;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setChildren(List<Column> children) {
+		this.children = children;
 	}
 
 	@Override
@@ -96,7 +89,7 @@ public class Brand extends BaseEntity{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Brand that = (Brand) o;
+        Column that = (Column) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
 

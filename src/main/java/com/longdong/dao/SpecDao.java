@@ -7,11 +7,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>Spec: Zhang Kaitao
- * <p>Date: 14-1-28
- * <p>Version: 1.0
- */
+
 public interface SpecDao {
 
     public Spec createSpec(Spec Spec);
