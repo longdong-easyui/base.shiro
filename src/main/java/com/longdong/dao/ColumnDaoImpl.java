@@ -3,6 +3,7 @@ package com.longdong.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ColumnDaoImpl extends BaseDaoImpl implements ColumnDao {
     private LobHandler lobHandler;
     
     public Column createColumn(final Column column) {
-        final String sql = "insert into column(parentId,name,url,sortNo,available,createdDate,updatedDate) values(?,?,?,?,?,now(),now())";
+        final String sql = "insert into columns(parentId,name,url,sortNo,available,createdDate,updatedDate) values(?,?,?,?,?,now(),now())";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -43,13 +44,13 @@ public class ColumnDaoImpl extends BaseDaoImpl implements ColumnDao {
             }
         }, keyHolder);
         column.setId(keyHolder.getKey().intValue());
-        //column.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+       // column.setCreatedDate(new Timestamp(System.currentTimeMillis()));
         return column;
     }
 
     @Override
     public Column updateColumn(Column column) {
-        final String sql = "update column set name=?,url=?,sortNo=?,available=?,updatedDate=now() where id=?";
+        final String sql = "update columns set name=?,url=?,sortNo=?,available=?,updatedDate=now() where id=?";
         jdbcTemplate.update(
                 sql,
                 column.getName(),column.getUrl(),
@@ -59,7 +60,7 @@ public class ColumnDaoImpl extends BaseDaoImpl implements ColumnDao {
 
     @Override
     public Column findOne(Long columnId) {
-        final String sql = "select id,parentId,name,url,sortNo,available,createdDate from column where id=?";
+        final String sql = "select id,parentId,name,url,sortNo,available,createdDate from columns where id=?";
        
         @SuppressWarnings("unchecked")
 		List<Column> columnList = jdbcTemplate.query(sql,new BeanPropertyRowMapper(Column.class),columnId);
@@ -75,7 +76,7 @@ public class ColumnDaoImpl extends BaseDaoImpl implements ColumnDao {
 		
 		String wqc = getWhereQueryConditon(column);
 		
-		String sql = "select count(*) from column "+ wqc.toString();
+		String sql = "select count(*) from columns "+ wqc.toString();
 		return jdbcTemplate.queryForObject(sql, Integer.class);
 	}
 	
@@ -88,7 +89,7 @@ public class ColumnDaoImpl extends BaseDaoImpl implements ColumnDao {
 		int skipResults = column.getSkipResults();
 		int rows = column.getRows();
 		
-		String sql = " select id,parentId,name,url,sortNo,available,createdDate from column "
+		String sql = " select id,parentId,name,url,sortNo,available,createdDate from columns "
 				+ wqc.toString()
 				+ " order by "+sort+" "+order+" limit "+skipResults+","+rows;
 		

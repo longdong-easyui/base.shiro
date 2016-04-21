@@ -32,6 +32,15 @@
 					<td>排序</td>
 					<td><input name="sortNo" class="easyui-validatebox"/></td>
 				</tr>
+				<tr>
+					<td>状态</td>
+					<td><select name="available" class="easyui-combobox" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
+								
+								<option value="1">禁用</option>
+								<option value="0">可用</option>
+						</select>
+					</td>
+				</tr>
 			</table>
 		</fieldset>
 	</form>  

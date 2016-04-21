@@ -12,7 +12,7 @@
 
 <body>   
 	<form method="post" id="addColumnForm" enctype="multipart/form-data">
-		<input type="hidden" name="available" value="0"/>
+		<input type="hidden" name="id" />
 		<fieldset>
 			<legend>栏目信息</legend>
 			<table class="table" style="width: 100%;">
@@ -34,6 +34,15 @@
 					<td>排序</td>
 					<td><input name="sortNo" class="easyui-validatebox"/></td>
 				</tr>
+				<tr>
+					<td>状态</td>
+					<td><select name="available" class="easyui-combobox" data-options="panelHeight:'auto',editable:false" style="width: 155px;">
+								
+								<option value="1">禁用</option>
+								<option value="0">可用</option>
+						</select>
+					</td>
+				</tr>
 			</table>
 		</fieldset>
 	</form>  
@@ -44,8 +53,8 @@
 			 */
 			$('#parentColumn').combotree({  
 				editable:false,  
-			    url:'${pageContext.request.contextPath}/column/getColumnList',     
-			    required: true  
+			    url:'${pageContext.request.contextPath}/column/getColumnList'  
+			   
 			});  
 			
 		});

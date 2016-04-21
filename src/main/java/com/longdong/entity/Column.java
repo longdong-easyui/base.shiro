@@ -1,5 +1,6 @@
 package com.longdong.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,7 +13,7 @@ public class Column extends BaseEntity{
     private Integer available ;			//0:可用，1：禁用
     private String availableStr;
    
-   private List<Column> children;
+    private List<Column> children=new ArrayList<Column>();
    
     public Integer getId() {
         return id;

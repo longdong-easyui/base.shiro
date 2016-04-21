@@ -55,7 +55,7 @@
 					fitColumns:true,
 					idField:'id',
 					treeField:'name',
-				    url:'${pageContext.request.contextPath}/column/findAllcolumn',  
+				    url:'${pageContext.request.contextPath}/column/findAllColumn',  
 				    rownumbers: true,  
 				    lines: true,
 				    sortName : 'id',
@@ -64,18 +64,9 @@
 					selectOnCheck:false,
 				    columns:[[    
 				        {field:'id',title:'id',width:100,checkbox:true},    
+				        {field:'parentId',title:'parentId',width:100,hidden:true},    
 				        {field:'name',title:'名称',width:100},
 				        {field:'url',title:'网址',width:200}, 
-				        {field:'type',title:'类型',width:200,formatter : function(value, row, index) {
-							switch (value) {
-							case 0:
-								return '图片';
-							case 1:
-								return '文本';
-							}
-						}},       
-				        {field:'sortNo',title:'排序',width:50,align:'right',sortable:true,order:'desc'},
-				        {field:'createdDate',title:'创建时间',width:100},
 				        {field:'availableStr',title:'状态',width:100}
 				    ]],
 				    toolbar: '#column_toolbar',
@@ -87,12 +78,12 @@
 			
 			//查询方法
 			function searchFun(){
-				columndg.datagrid('load',base.serializeObject($('#searchForm')));
+				columndg.treegrid('load',base.serializeObject($('#searchForm')));
 			}
 			//清空查询表单
 			function clearFun(){
 				$('#searchForm input').val('');
-				columndg.datagrid('load',{});
+				columndg.treegrid('load',{});
 			}
 			
 			/**
@@ -107,21 +98,21 @@
 								    height:600,    
 								    closed: false,    
 								    cache: false,    
-								    href: '${pageContext.request.contextPath}/column/toAddcolumnPage',    
+								    href: '${pageContext.request.contextPath}/column/toAddColumnPage',    
 								    modal: true,
 								    buttons : [ {
 										text : '添加',
 										handler : function() {
-											$('#addcolumnForm').form('submit', {   
-												url: '${pageContext.request.contextPath}/column/addcolumn',  
+											$('#addColumnForm').form('submit', {   
+												url: '${pageContext.request.contextPath}/column/addColumn',  
 											    success: function(data){ 
 											    	var json=$.parseJSON(data);  
 											    	
 											        if (json.status==0){
 											        	//刷新数据列表,效率较低
-											        	//$('#dg').datagrid('reload');
+											        	columndg.treegrid('reload');
 											        	//将新增的数据直接添加到数据列表中
-											        	columndg.datagrid('insertRow',{index:0,row:json.array});
+											        	//columndg.treegrid('insertRow',{index:0,row:json.array});
 											        	//消息提示 
 											            showMessage('提示',json.desc);
 											           
@@ -160,13 +151,13 @@
 							    height:600,    
 							    closed: false,    
 							    cache: false,    
-							    href: '${pageContext.request.contextPath}/column/toEditcolumnPage',    
+							    href: '${pageContext.request.contextPath}/column/toEditColumnPage',    
 							    modal: true,
 							    buttons : [ {
 									text : '编辑',
 									handler : function() {
-										$('#editcolumnForm').form('submit', {   
-												url: '${pageContext.request.contextPath}/column/editcolumn',  
+										$('#editColumnForm').form('submit', {   
+												url: '${pageContext.request.contextPath}/column/editColumn',  
 											    success: function(data){ 
 											    	var json=$.parseJSON(data); 
 											    	
@@ -189,12 +180,10 @@
 								} ],
 								onLoad:function(){
 									//加载编辑窗口的时候，给表单赋值
-									$.post('${pageContext.request.contextPath}/column/findcolumnById',{id:rows[0].id},function(data){
+									$.post('${pageContext.request.contextPath}/column/findColumnById',{id:rows[0].id},function(data){
 										var json=$.parseJSON(data); 
 										if(json.status==0){
 											$('#editcolumnForm').form('load',json.array);
-											$('#logo').attr('src','${pageContext.request.contextPath}/column/findImgById?id='+rows[0].id);
-											
 										}
 									});
 								},

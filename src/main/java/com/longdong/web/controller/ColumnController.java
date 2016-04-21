@@ -1,10 +1,6 @@
 package com.longdong.web.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializeFilter;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.longdong.entity.Column;
 import com.longdong.service.ColumnService;
 import com.longdong.util.EnumUtil;
+
 
 @Controller
 @RequestMapping("/column")
@@ -55,20 +53,67 @@ public class ColumnController extends BaseController {
 	@RequestMapping("findAllColumn")
 	public void findAllColumn(Column column, HttpServletRequest request,
 			HttpServletResponse response) {
-
-		int total = columnService.findCount(column);
-
-		List<Column> list = columnService.findAllColumn(column);
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("total", total);
-		map.put("rows", list);
-		writeJson(map, response);
+		try {
+			Column newc = new Column();
+			newc.setParentId(-1);
+			List<Column> roots = columnService.findAllColumn(newc);
+			for(Column root : roots){
+				int parentId = root.getId();
+				recursiveTree(root,parentId);
+			}
+			SimplePropertyPreFilter filter = new SimplePropertyPreFilter(Column.class, "id","parentId","name","url","availableStr","children"); 
+	        
+			String json = JSON.toJSONString(roots,filter);
+			
+			logger.info("findAllColumn.response_json:" + json);
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().write(json);
+			response.getWriter().flush();
+			response.getWriter().close();
+		} catch (IOException e) {
+			logger.error(e, e);
+		}
 	}
-	 @RequestMapping("addColumn")
-	public void addcolumn(Column column,HttpServletRequest request,HttpServletResponse response) {
+	/**
+	* 递归算法解析成树形结构
+	*/
+	public void recursiveTree(Column parent,int parentId) {
+		
+		Column column = new Column();
+		column.setParentId(parentId);
+		List<Column> childs = columnService.findAllColumn(column);
+		parent.setChildren(childs);
+		for(Column child : childs){
+			recursiveTree(child,child.getId()); 
+		}
+	}
+	
+	@RequestMapping("getColumnList")
+	public void getColumnList(HttpServletResponse response){
+		try {
+			Column column = new Column();
+			List<Column> list = columnService.findAllColumn(column);
+	
+			String json = JSON.toJSONString(list);
+			
+			logger.info("response json:" + json);
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().write(json);
+			response.getWriter().flush();
+			response.getWriter().close();
+		} catch (IOException e) {
+			logger.error(e, e);
+		}
+	}
+	
+	@RequestMapping("addColumn")
+	public void addColumn(Column column,HttpServletRequest request,HttpServletResponse response) {
 			
 			try{
+				Integer parentId = column.getParentId();
+				if(parentId==null){
+					column.setParentId(-1);
+				}
 				Column res = columnService.createColumn(column);
 				
 				Map<String,Object> map = new HashMap<String,Object>();
