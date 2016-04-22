@@ -50,9 +50,9 @@ public class ColumnDaoImpl extends BaseDaoImpl implements ColumnDao {
 
     @Override
     public Column updateColumn(Column column) {
-        final String sql = "update columns set name=?,url=?,sortNo=?,available=?,updatedDate=now() where id=?";
+        final String sql = "update columns set parentId=?,name=?,url=?,sortNo=?,available=?,updatedDate=now() where id=?";
         jdbcTemplate.update(
-                sql,
+                sql,column.getParentId(),
                 column.getName(),column.getUrl(),
                 column.getSortNo(),column.getAvailable(), column.getId());
         return column;
@@ -97,6 +97,12 @@ public class ColumnDaoImpl extends BaseDaoImpl implements ColumnDao {
 		
         return list;
 		
+	}
+
+	@Override
+	public int deleteColumns(String ids) {
+		String sql = "delete from columns where id in ("+ids+")";
+	    return jdbcTemplate.update(sql);
 	}
 	
 }

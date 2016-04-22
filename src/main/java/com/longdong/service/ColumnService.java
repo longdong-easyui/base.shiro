@@ -13,6 +13,7 @@ public interface ColumnService {
     Column findOne(Long columnId);
 	public int findCount(Column column);
 	public List<Column> findAllColumn(Column column);
+	public int deleteColumns(String ids);
 	
 	
 }

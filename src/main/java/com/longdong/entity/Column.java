@@ -12,7 +12,7 @@ public class Column extends BaseEntity{
     private Integer sortNo;
     private Integer available ;			//0:可用，1：禁用
     private String availableStr;
-   
+    private String text;
     private List<Column> children=new ArrayList<Column>();
    
     public Integer getId() {
@@ -28,9 +28,18 @@ public class Column extends BaseEntity{
     }
 
     public void setName(String name) {
+    	this.text = name;
         this.name = name;
     }
    
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
 	public String getUrl() {
 		return url;
 	}

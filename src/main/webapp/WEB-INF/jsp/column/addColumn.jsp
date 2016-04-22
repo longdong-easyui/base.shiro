@@ -12,7 +12,7 @@
 
 <body>   
 	<form method="post" id="addColumnForm" enctype="multipart/form-data">
-		<input type="hidden" name="id" />
+		
 		<fieldset>
 			<legend>栏目信息</legend>
 			<table class="table" style="width: 100%;">
@@ -32,7 +32,7 @@
 				</tr>
 				<tr>
 					<td>排序</td>
-					<td><input name="sortNo" class="easyui-validatebox"/></td>
+					<td><input name="sortNo" class="easyui-validatebox" data-options="required:true"/></td>
 				</tr>
 				<tr>
 					<td>状态</td>

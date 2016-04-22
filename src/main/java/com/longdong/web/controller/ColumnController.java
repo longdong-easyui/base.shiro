@@ -1,13 +1,18 @@
 package com.longdong.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.longdong.entity.Column;
 import com.longdong.service.ColumnService;
@@ -91,10 +95,16 @@ public class ColumnController extends BaseController {
 	@RequestMapping("getColumnList")
 	public void getColumnList(HttpServletResponse response){
 		try {
-			Column column = new Column();
-			List<Column> list = columnService.findAllColumn(column);
-	
-			String json = JSON.toJSONString(list);
+			Column newc = new Column();
+			newc.setParentId(-1);
+			List<Column> roots = columnService.findAllColumn(newc);
+			for(Column root : roots){
+				int parentId = root.getId();
+				recursiveTree(root,parentId);
+			}
+			SimplePropertyPreFilter filter = new SimplePropertyPreFilter(Column.class, "id","parentId","text","children"); 
+	        
+			String json = JSON.toJSONString(roots,filter);
 			
 			logger.info("response json:" + json);
 			response.setContentType("text/html;charset=utf-8");
@@ -174,7 +184,51 @@ public class ColumnController extends BaseController {
 				writeJson(map,response);
 			}
 		}
+		
+		@RequestMapping("deleteColumn")
+		public void deleteColumn(String ids, HttpServletResponse response){
+			logger.info("ids="+ids);
+			String[] idArr = ids.split(",");
+			List<Column> nodes = new ArrayList<Column>();
+			for(String id : idArr){
+				Column node = columnService.findOne(Long.valueOf(id));
+				recursiveTree(node,node.getId());
+				nodes.add(node);
+			}
+			Set<String> childids = new HashSet<String>();
+			for(Column node : nodes){
+				String id =node.getId()+"";
+				childids.add(id);
+				List<Column> children =node.getChildren();
+				fetchId(childids,children);
+			}
+			Iterator<String> itr = childids.iterator();
 			
+			String temp = StringUtils.join(itr,",");
+			try{
+				int count = columnService.deleteColumns(temp);
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
+				map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
+				map.put("array",count);
+				writeJson(map,response);
+			}catch(Exception e){
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
+				map.put("desc",e.getMessage());
+				writeJson(map,response);
+			}
+		}
+		
+		private void fetchId(Set<String> childids, List<Column> children) {
+			for(Column child : children){
+				String id =child.getId()+"";
+				childids.add(id);
+				List<Column> childs =child.getChildren();
+				fetchId(childids,childs);
+			}
+		}
+		
 }
 
 

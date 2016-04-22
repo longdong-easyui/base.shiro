@@ -43,4 +43,10 @@ public class ColumnServiceImpl implements ColumnService {
 		return columnDao.findAllColumn(column);
 	}
 
+	@Override
+	public int deleteColumns(String ids) {
+		
+		return columnDao.deleteColumns(ids);
+	}
+
 }

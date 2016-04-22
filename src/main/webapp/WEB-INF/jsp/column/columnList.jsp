@@ -163,9 +163,9 @@
 											    	
 											        if (json.status==0){
 											        	//刷新数据列表,效率较低
-											        	//$('#dg').datagrid('reload');
+											        	columndg.treegrid('reload');
 											        	//将编辑的数据直接更新数据列表中对应的列
-											        	columndg.datagrid('updateRow',{index:rowindex,row:json.array});
+											        	//columndg.datagrid('updateRow',{index:rowindex,row:json.array});
 											        	//console.info(json.array);
 											        	//消息提示 
 											            showMessage('提示',json.desc);
@@ -183,7 +183,7 @@
 									$.post('${pageContext.request.contextPath}/column/findColumnById',{id:rows[0].id},function(data){
 										var json=$.parseJSON(data); 
 										if(json.status==0){
-											$('#editcolumnForm').form('load',json.array);
+											$('#editColumnForm').form('load',json.array);
 										}
 									});
 								},
@@ -197,6 +197,42 @@
 					$.messager.alert('提示','同一时间只能编辑一条记录！','error');
 				}else{
 					$.messager.alert('提示','请选择要编辑的记录！','error');
+				}
+			}
+			
+			function deleteFun(){
+				var rows = columndg.treegrid('getChecked');
+				var ids = [];
+				if (rows.length > 0) {
+					$.messager.confirm('请确认', '确定要删除勾选记录以及它的子级元素吗？', function(r) {
+						if (r) {
+							for ( var i = 0; i < rows.length; i++) {
+								if(rows[i]._parentId != 0){  //强制性不能删除根目录
+									ids.push(rows[i].id);
+								}
+							}
+							$.ajax({
+								url : '${pageContext.request.contextPath}/column/deleteColumn',  
+								data : {
+									ids : ids.join(',')
+								},
+								dataType : 'json',
+								success : function(data) {
+									 
+									columndg.treegrid('load');
+									columndg.treegrid('unselectAll');
+									 if(data.status==0){
+									  	showMessage( '提示',data.desc+'删除'+data.array+'条');
+									 }else{
+									 	showMessage( '提示',data.desc);
+									 }
+									
+								}
+							});
+						}
+					});
+				} else {
+					$.messager.alert('提示', '请勾选要删除的记录！', 'error');
 				}
 			}
 			/**

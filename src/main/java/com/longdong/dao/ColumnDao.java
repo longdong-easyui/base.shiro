@@ -14,5 +14,6 @@ public interface ColumnDao {
     
 	public int findCount(Column column);
 	public List<Column> findAllColumn(Column column);
+	public int deleteColumns(String ids);
 	
 }
