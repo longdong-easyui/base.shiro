@@ -1,20 +1,14 @@
 package com.longdong.web.controller;
 
-import org.apache.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.longdong.entity.Resource;
-import com.longdong.entity.Role;
-import com.longdong.service.ResourceService;
-import com.longdong.service.RoleService;
-import com.longdong.util.EnumUtil;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.longdong.entity.Resource;
+import com.longdong.entity.Role;
+import com.longdong.service.ResourceService;
+import com.longdong.service.RoleService;
+import com.longdong.util.EnumUtil;
+
 
 @Controller
 @RequestMapping("/role")
@@ -30,7 +30,7 @@ public class RoleController extends BaseController{
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(RoleController.class);
+	private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
 
     @Autowired
     private RoleService roleService;

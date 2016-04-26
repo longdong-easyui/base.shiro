@@ -12,7 +12,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,7 @@ import com.longdong.util.EnumUtil;
 @RequestMapping("/brand")
 public class BrandController extends BaseController {
 
-	private static final Logger logger = Logger.getLogger(BrandController.class);
+	private static final Logger logger = LoggerFactory.getLogger(BrandController.class);
 
 	@Autowired
 	private BrandService brandService;
@@ -84,7 +85,7 @@ public class BrandController extends BaseController {
 				writeJson(map,response);
 				
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("addBrand",e);
 				
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
@@ -107,7 +108,7 @@ public class BrandController extends BaseController {
 				writeJson(map,response);
 				
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("editBrand",e);
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",e.getMessage());
@@ -128,7 +129,7 @@ public class BrandController extends BaseController {
 				map.put("array", brand);
 				writeJson(map,response);
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("findBrandById",e);
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",e.getMessage());
@@ -160,7 +161,7 @@ public class BrandController extends BaseController {
 				//清空输出缓冲流        
 				bos.close();
 			} catch (IOException e) {
-				logger.error(e, e);
+				logger.error("findImgById",e);
 			}
 			logger.info("findImgById.end");
 		}

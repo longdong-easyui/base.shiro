@@ -9,9 +9,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +33,7 @@ import com.longdong.util.EnumUtil;
 @RequestMapping("/organization")
 public class OrganizationController extends BaseController{
 	
-	private static final Logger logger = Logger.getLogger(OrganizationController.class);
+	private static final Logger logger = LoggerFactory.getLogger(OrganizationController.class);
 	
     @Autowired
     private OrganizationService organizationService;

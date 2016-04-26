@@ -12,7 +12,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,7 @@ import com.longdong.util.EnumUtil;
 @RequestMapping("/spec")
 public class SpecController extends BaseController {
 
-	private static final Logger logger = Logger.getLogger(SpecController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SpecController.class);
 
 	@Autowired
 	private SpecService specService;
@@ -101,7 +102,7 @@ public class SpecController extends BaseController {
 				writeJson(map,response);
 				
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("addspec",e);
 				
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
@@ -124,7 +125,7 @@ public class SpecController extends BaseController {
 				writeJson(map,response);
 				
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("editSpec",e);
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",e.getMessage());
@@ -145,7 +146,7 @@ public class SpecController extends BaseController {
 				map.put("array", spec);
 				writeJson(map,response);
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("findSpecById",e);
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",e.getMessage());
@@ -179,7 +180,7 @@ public class SpecController extends BaseController {
 				//清空输出缓冲流        
 				bos.close();
 			} catch (IOException e) {
-				logger.error(e, e);
+				logger.error("findImgById", e);
 			}
 			logger.info("findImgById.end");
 		}
@@ -220,7 +221,7 @@ public class SpecController extends BaseController {
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
 				writeJson(map,response);
 			} catch (Exception e) {
-				logger.error(e, e);
+				logger.error("editSpecDetail", e);
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",e.getMessage());
@@ -258,7 +259,7 @@ public class SpecController extends BaseController {
 				}
 				
 			} catch (Exception e) {
-				logger.error(e, e);
+				logger.error("updateSpecDetail", e);
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",e.getMessage());

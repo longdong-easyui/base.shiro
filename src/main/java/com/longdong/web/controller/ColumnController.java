@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,7 @@ import com.longdong.util.EnumUtil;
 @RequestMapping("/column")
 public class ColumnController extends BaseController {
 
-	private static final Logger logger = Logger.getLogger(ColumnController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ColumnController.class);
 
 	@Autowired
 	private ColumnService columnService;
@@ -75,7 +76,7 @@ public class ColumnController extends BaseController {
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (IOException e) {
-			logger.error(e, e);
+			logger.error("findAllColumn", e);
 		}
 	}
 	/**
@@ -112,7 +113,7 @@ public class ColumnController extends BaseController {
 			response.getWriter().flush();
 			response.getWriter().close();
 		} catch (IOException e) {
-			logger.error(e, e);
+			logger.error("getColumnList", e);
 		}
 	}
 	
@@ -133,7 +134,7 @@ public class ColumnController extends BaseController {
 				writeJson(map,response);
 				
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("addColumn",e);
 				
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
@@ -156,7 +157,7 @@ public class ColumnController extends BaseController {
 				writeJson(map,response);
 				
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("editColumn",e);
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",e.getMessage());
@@ -177,7 +178,7 @@ public class ColumnController extends BaseController {
 				map.put("array", column);
 				writeJson(map,response);
 			}catch(Exception e){
-				logger.info(e,e);
+				logger.error("findColumnById",e);
 				Map<String,Object> map = new HashMap<String,Object>();
 				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
 				map.put("desc",e.getMessage());
