@@ -10,11 +10,11 @@ public class Article extends BaseEntity{
     private byte[] thumbnail;  //缩略图
     private byte[] content;
     
-    private Integer sortNo;
-    private Integer available ;			//0:可用，1：禁用
+    private Integer sortNo=1;
+    private Integer available=0;			//0:可用，1：禁用
     private String availableStr;
    
-    private Integer isTop ;			//0:置顶，1：不置顶
+    private Integer isTop=1;			//0:置顶，1：不置顶
     private String isTopStr;
     
     

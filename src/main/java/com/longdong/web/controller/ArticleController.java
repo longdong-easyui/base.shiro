@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.longdong.entity.Article;
 import com.longdong.service.ArticleService;
@@ -41,6 +42,11 @@ public class ArticleController extends BaseController {
     public String toAddArticlePage(){
     	return "article/addArticle";
     }
+	
+	@RequestMapping("setArtTypePage")
+    public String setArtTypePage(){
+    	return "article/artType";
+    }
 	 @RequestMapping("toEditArticlePage")
 	 public String toEditArticlePage(){
 	     return "article/editArticle";
@@ -60,7 +66,7 @@ public class ArticleController extends BaseController {
 		writeJson(map, response);
 	}
 	 @RequestMapping("addArticle")
-	public void addArticle(Article article,HttpServletRequest request,HttpServletResponse response) {
+	public String addArticle(Article article,HttpServletRequest request,RedirectAttributes attr) {
 			
 			try{
 				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;     
@@ -71,22 +77,17 @@ public class ArticleController extends BaseController {
 		        article.setThumbnail(multipartFile.getBytes());
 				Article res = articleService.createArticle(article);
 				
-				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
-				map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
-				map.put("array",res);
-				writeJson(map,response);
 				
+				attr.addAttribute("status", 0);
+				attr.addAttribute("desc", "添加文章成功");
 			}catch(Exception e){
 				logger.error("addArticle",e);
 				
-				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
-				map.put("desc",e.getMessage());
-				writeJson(map,response);
+				attr.addAttribute("status", 1);
+				attr.addAttribute("desc", e.getLocalizedMessage());
 				
 			}
-			
+			return "redirect:/article/toAddArticlePage"; 
 		}
 		
 		@RequestMapping("editArticle")

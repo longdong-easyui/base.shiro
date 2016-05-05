@@ -14,7 +14,7 @@
 				<table style="font-size:12px;">
 					<tr>
 						<td>名称:</td>
-						<td><input type="text" name="name" class="easyui-validatebox"/></td>
+						<td><input type="text" name="title" class="easyui-validatebox"/></td>
 						
 						<td align="right">
 							<a id="btn" href="#" onclick="searchFun();" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
@@ -47,26 +47,23 @@
       	</div>
 	    <div data-options="region:'center',title:'center title'" style="padding:5px;background:#eee;">
 	    	
-	    	 <div class="easyui-tabs" data-options="fit:true,plain:true">
-                <div title="文章列表" style="padding:10px;">
-                	<table id="articledg"></table>  
-                </div>
-                <div title="新增文章" data-options="
-                					fit:true,
-                					plain:true
-					                href:'${pageContext.request.contextPath}/article/toAddArticlePage',
-					                closable:true" 
-					                style="padding:10px">
-                </div>
-               <div title="文章分类" data-options="
-                					fit:true,
-                					plain:true
-					                href:'${pageContext.request.contextPath}/article/toAddArticlePage',
-					                closable:true" 
-					                style="padding:10px">
-                </div>
-                
-            </div>
+            <div id="tt" class="easyui-tabs" data-options="fit:true,plain:true" style="width:700px;height:450px">
+		          <div title="文章列表" style="padding:5px;">
+		         	<table id="articledg"></table>
+		         </div>
+		         <div title="新增文章" style="padding:5px;">
+		         	 <iframe scrolling="yes" 
+		         	 		 frameborder="0"  
+		         	 		 src="${pageContext.request.contextPath}/article/toAddArticlePage" 
+		         	 		 style="width:100%;height:100%;">
+		         	 </iframe>
+		         </div>
+		         <div title="设置文章分类" style="padding:5px;" 
+		         		data-options="href:'${pageContext.request.contextPath}/article/setArtTypePage',closable:true" >
+		         </div>
+		        
+		    </div>
+           
 	    </div> 
 		<script type="text/javascript">
 			var articledg;
@@ -86,9 +83,12 @@
 				    columns:[[    
 				        {field:'id',title:'id',width:100,checkbox:true},    
 				        {field:'title',title:'标题',width:100},
-				        {field:'url',title:'所属分类',width:200}, 
-				        {field:'createdDate',title:'创建时间',width:100},
-				        {field:'availableStr',title:'状态',width:100}
+				        {field:'subTitle',title:'副标题',width:200}, 
+				        {field:'subTitle',title:'缩略图',width:200}, 
+				        {field:'type',title:'文章类型',width:100},
+				        {field:'availableStr',title:'状态',width:50},
+				        {field:'isTopStr',title:'是否置顶',width:70},
+				        {field:'createdDate',title:'创建时间',width:100}
 				    ]],
 				    toolbar: '#article_toolbar',
 				    onSelect:function(rowIndex,rowData){
