@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.longdong.dao.ArticleDao;
 import com.longdong.entity.Article;
+import com.longdong.entity.ArticleType;
 
 
 @Service
@@ -41,6 +42,18 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<Article> findAllArticle(Article article) {
 		
 		return articleDao.findAllArticle(article);
+	}
+
+	@Override
+	public ArticleType createArticleType(ArticleType articleType) {
+		
+		return articleDao.createArticleType(articleType);
+	}
+
+	@Override
+	public List<ArticleType> findAllArticleType() {
+		
+		return articleDao.findAllArticleType();
 	}
 
 	

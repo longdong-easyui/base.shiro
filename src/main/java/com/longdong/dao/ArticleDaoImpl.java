@@ -15,6 +15,7 @@ import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 
 import com.longdong.entity.Article;
+import com.longdong.entity.ArticleType;
 
 
 @Repository
@@ -93,11 +94,46 @@ public class ArticleDaoImpl extends BaseDaoImpl implements ArticleDao {
 		int skipResults = article.getSkipResults();
 		int rows = article.getRows();
 		
-		String sql = " select id,title,subTitle,type,thumbnail,sortNo,isTop,available,createdDate from article "
+		String sql = " select a.id,a.title,a.subTitle,a.type,at.name as typeName,a.thumbnail,"
+				+ "a.sortNo,a.isTop,a.available,a.createdDate "
+				+ "from article a left join articleType at on a.type=at.id"
 				+ wqc.toString()
 				+ " order by "+sort+" "+order+" limit "+skipResults+","+rows;
 		
 		List<Article> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper(Article.class));
+		
+        return list;
+		
+	}
+
+	@Override
+	public ArticleType createArticleType(ArticleType articleType) {
+		
+		 final String sql = "insert into articleType(name,code) values(?,?)";
+
+	        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+	        jdbcTemplate.update(new PreparedStatementCreator() {
+	            @Override
+	            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+	                PreparedStatement psst = connection.prepareStatement(sql, new String[]{"id"});
+	                int count = 1;
+	                psst.setString(count++, articleType.getName());
+	                psst.setString(count++, articleType.getCode());
+	               
+	                return psst;
+	            }
+	        }, keyHolder);
+	        articleType.setId(keyHolder.getKey().intValue());
+	       
+	        return articleType;
+	}
+
+	@Override
+	public List<ArticleType> findAllArticleType() {
+
+		String sql = " select id,name,code from articleType";
+		
+		List<ArticleType> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper(ArticleType.class));
 		
         return list;
 		

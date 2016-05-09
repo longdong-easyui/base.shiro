@@ -56,7 +56,7 @@ KindEditor.ready(function(K) {
 				</tr>
 				<tr>
 					<td>文章类型</td>
-					<td><input name="type" class="easyui-validatebox" /></td>
+					<td><input id="setType" name="type"/></td>
 				</tr>
 				<tr>
 					<td>缩略图</td>
@@ -79,30 +79,18 @@ KindEditor.ready(function(K) {
 		</fieldset>
 	</form>  
 	<script type="text/javascript">
-		
+		$('#setType').combobox({
+		    url:'${pageContext.request.contextPath}/article/findAllArticleType',
+		    valueField:'id',
+		    textField:'name',
+		    required:true
+		});
 		//设置上传附件控件的属性	
 		$('#fb').filebox({    
 		    buttonText: '选择文件', 
 		    buttonAlign: 'right' 
 		});
-		/* function addFun(){
-			
-			$('#addArticleForm').form('submit', { 
-				url : '${pageContext.request.contextPath}/article/addArticle', 
-			    success: function(data){ 
-			    	var json=$.parseJSON(data); 
-			    	
-			        if (json.status==0){
-			        	alert("文章添加成功,继续添加");
-			        	window.parent.callback();
-			        }else{
-			        	alert(json.desc);
-			        } 
-			    	
-			    }    
-			});
-			
-		} */
+		
 		
 	</script>
 </body> 
