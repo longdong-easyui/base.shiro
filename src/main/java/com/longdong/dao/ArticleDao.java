@@ -20,5 +20,6 @@ public interface ArticleDao {
 	public ArticleType createArticleType(ArticleType articleType);
 	public List<ArticleType> findAllArticleType();
 	public Map<String, InputStream> findThumdById(Long id);
+	public int deleteArticles(String ids);
 	
 }

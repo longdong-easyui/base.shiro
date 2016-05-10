@@ -64,5 +64,11 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleDao.findThumdById(id);
 	}
 
+	@Override
+	public int deleteArticles(String ids) {
+		
+		return articleDao.deleteArticles(ids);
+	}
+
 	
 }

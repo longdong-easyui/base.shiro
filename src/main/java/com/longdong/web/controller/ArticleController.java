@@ -177,7 +177,22 @@ public class ArticleController extends BaseController {
 		}
 		return "redirect:/article/toEditArticlePage?id="+article.getId(); 
 	}
-		
+	@RequestMapping("deleteArticle")
+	public void deleteArticle(String ids, HttpServletResponse response){
+		try{
+			int count = articleService.deleteArticles(ids);
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("status",EnumUtil.RETURN_JSON_STATUS.SUCCESS.key);
+			map.put("desc",EnumUtil.RETURN_JSON_STATUS.SUCCESS.value);
+			map.put("array",count);
+			writeJson(map,response);
+		}catch(Exception e){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("status",EnumUtil.RETURN_JSON_STATUS.FAILURE.key);
+			map.put("desc",e.getMessage());
+			writeJson(map,response);
+		}
+	}	
 	@RequestMapping("findArticleById")
 	public void findArticleById(Long id,HttpServletResponse response){
 		System.out.println(id);

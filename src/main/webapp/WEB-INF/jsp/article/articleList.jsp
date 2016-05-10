@@ -191,6 +191,43 @@
 				}
 			}
 			/**
+			 * 删除函数
+			 * @returns {} 
+			 */
+			function deleteFun(){
+				var rows = articledg.datagrid('getChecked');
+				var ids = [];
+				if (rows.length > 0) {
+					$.messager.confirm('请确认', '确定要删除勾选记录吗？', function(r) {
+						if (r) {
+							for ( var i = 0; i < rows.length; i++) {
+								ids.push(rows[i].id);
+							}
+							$.ajax({
+								url : '${pageContext.request.contextPath}/article/deleteArticle',  
+								data : {
+									ids : ids.join(',')
+								},
+								dataType : 'json',
+								success : function(data) {
+									 
+									articledg.datagrid('load');
+									articledg.datagrid('unselectAll');
+									 if(data.status==0){
+									  	showMessage( '提示',data.desc+'删除'+data.array+'条');
+									 }else{
+									 	showMessage( '提示',data.desc);
+									 }
+									
+								}
+							});
+						}
+					});
+				} else {
+					$.messager.alert('提示', '请勾选要删除的记录！', 'error');
+				}
+			}
+			/**
 			 * 提示消息
 			 * @param {} title
 			 * @param {} msg

@@ -174,5 +174,11 @@ public class ArticleDaoImpl extends BaseDaoImpl implements ArticleDao {
 	        Object obj = list.get(0);
 		return (Map<String, InputStream>) obj;
 	}
+
+	@Override
+	public int deleteArticles(String ids) {
+		String sql = "delete from article where id in ("+ids+")";
+		return jdbcTemplate.update(sql);
+	}
 	
 }
