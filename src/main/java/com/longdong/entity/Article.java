@@ -1,5 +1,6 @@
 package com.longdong.entity;
 
+import org.springframework.web.util.HtmlUtils;
 
 public class Article extends BaseEntity{
     private Long id; //编号
@@ -11,6 +12,7 @@ public class Article extends BaseEntity{
     
     private byte[] thumbnail;  //缩略图
     private byte[] content;
+    private String contentStr;
     
     private Integer sortNo=1;
     private Integer available=0;			//0:可用，1：禁用
@@ -55,7 +57,18 @@ public class Article extends BaseEntity{
 		return content;
 	}
 	public void setContent(byte[] content) {
+		if(content!=null){
+			String str = new String(content);
+			this.contentStr=htmlspecialchars(str);
+		}
 		this.content = content;
+	}
+	
+	public String getContentStr() {
+		return contentStr;
+	}
+	public void setContentStr(String contentStr) {
+		this.contentStr = contentStr;
 	}
 	public Integer getSortNo() {
 		return sortNo;
@@ -68,9 +81,9 @@ public class Article extends BaseEntity{
 	}
 	public void setIsTop(Integer isTop) {
 		if(isTop==0){
-    		this.availableStr ="置顶";
+    		this.isTopStr ="置顶";
     	}else{
-    		this.availableStr ="不置顶";
+    		this.isTopStr ="不置顶";
     	}
 		this.isTop = isTop;
 	}
@@ -104,6 +117,9 @@ public class Article extends BaseEntity{
 		
 		this.availableStr = availableStr;
 	}
-   
+	private String htmlspecialchars(String str) {
+		
+		return HtmlUtils.htmlEscape(str);
+	}
   
 }

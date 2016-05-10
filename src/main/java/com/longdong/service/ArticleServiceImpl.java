@@ -1,6 +1,8 @@
 package com.longdong.service;
 
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,12 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<ArticleType> findAllArticleType() {
 		
 		return articleDao.findAllArticleType();
+	}
+
+	@Override
+	public Map<String, InputStream> findThumdById(Long id) {
+		
+		return articleDao.findThumdById(id);
 	}
 
 	

@@ -1,15 +1,20 @@
 package com.longdong.dao;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
@@ -54,18 +59,30 @@ public class ArticleDaoImpl extends BaseDaoImpl implements ArticleDao {
 
     @Override
     public Article updateArticle(Article article) {
-        final String sql = "update article set title=?,subTitle=?,type=?,thumbnail=?,content=?,sortNo=?,isTop=?,available=?,updatedDate=now() where id=?";
-        jdbcTemplate.update(
-                sql,
-                article.getTitle(),article.getSubTitle(),article.getType(),article.getThumbnail(),
-                article.getContent(),article.getSortNo(),article.getIsTop(),article.getAvailable(),
-                article.getId());
+    	if(article.getThumbnail()!=null){
+    		
+    		final String sql = "update article set title=?,subTitle=?,type=?,thumbnail=?,content=?,sortNo=?,isTop=?,available=?,updatedDate=now() where id=?";
+            jdbcTemplate.update(
+                    sql,
+                    article.getTitle(),article.getSubTitle(),article.getType(),article.getThumbnail(),
+                    article.getContent(),article.getSortNo(),article.getIsTop(),article.getAvailable(),
+                    article.getId());
+            
+    	}else{
+    		System.out.println("updateArticle,不更新缩略图");
+    		final String sql = "update article set title=?,subTitle=?,type=?,content=?,sortNo=?,isTop=?,available=?,updatedDate=now() where id=?";
+            jdbcTemplate.update(
+                    sql,
+                    article.getTitle(),article.getSubTitle(),article.getType(),
+                    article.getContent(),article.getSortNo(),article.getIsTop(),article.getAvailable(),
+                    article.getId());
+    	}
         return article;
     }
 
     @Override
     public Article findOne(Long articleId) {
-        final String sql = "select id,title,subTitle,type,thumbnail,sortNo,isTop,available,createdDate from article where id=?";
+        final String sql = "select id,title,subTitle,type,thumbnail,content,sortNo,isTop,available,createdDate from article where id=?";
        
         @SuppressWarnings("unchecked")
 		List<Article> articleList = jdbcTemplate.query(sql,new BeanPropertyRowMapper(Article.class),articleId);
@@ -137,6 +154,25 @@ public class ArticleDaoImpl extends BaseDaoImpl implements ArticleDao {
 		
         return list;
 		
+	}
+
+	@Override
+	public Map<String, InputStream> findThumdById(Long id) {
+		 final String sql = "select thumbnail from article where id=?";
+	       
+	        @SuppressWarnings("unchecked")
+	        List<Object> list=jdbcTemplate.query(sql, new RowMapper(){
+				@Override
+				public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+					Map results = new HashMap();  
+					InputStream ins = lobHandler.getBlobAsBinaryStream(rs, "thumbnail");
+					results.put("thumbnail",ins);
+					return results;
+				}
+				
+			},id);
+	        Object obj = list.get(0);
+		return (Map<String, InputStream>) obj;
 	}
 	
 }

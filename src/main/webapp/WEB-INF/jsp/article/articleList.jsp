@@ -81,13 +81,12 @@
 					pageSize : 10,
 					pageList : [ 10, 20, 30, 40, 50, 100, 200, 300, 400, 500 ], 
 				    columns:[[    
-				        {field:'id',title:'id',width:100,checkbox:true},    
-				        {field:'title',title:'标题',width:100},
-				        {field:'subTitle',title:'副标题',width:200}, 
-				        {field:'subTitle',title:'缩略图',width:200}, 
-				        {field:'typeName',title:'文章类型',width:100},
+				        {field:'id',title:'id',width:50,checkbox:true},    
+				        {field:'title',title:'标题',width:70},
+				        {field:'subTitle',title:'副标题',width:70}, 
+				        {field:'typeName',title:'文章类型',width:70},
 				        {field:'availableStr',title:'状态',width:50},
-				        {field:'isTopStr',title:'是否置顶',width:70},
+				        {field:'isTopStr',title:'是否置顶',width:50},
 				        {field:'createdDate',title:'创建时间',width:100}
 				    ]],
 				    toolbar: '#article_toolbar',
@@ -171,45 +170,14 @@
 							    width: 1000,    
 							    height:600,    
 							    closed: false,    
-							    cache: false,    
-							    href: '${pageContext.request.contextPath}/article/toEditarticlePage',    
+							    cache: false,  
+							    content:'<iframe scrolling="yes" id="editframe" name="editframe1" ' 
+				         	 		 +'frameborder="0" '  
+				         	 		 +'src="${pageContext.request.contextPath}/article/toEditArticlePage?id='+ rows[0].id +'" '
+				         	 		 +'style="width:100%;height:100%;"> '
+				         	 		 +'</iframe> ',
 							    modal: true,
-							    buttons : [ {
-									text : '编辑',
-									handler : function() {
-										$('#editarticleForm').form('submit', {   
-												url: '${pageContext.request.contextPath}/article/editarticle',  
-											    success: function(data){ 
-											    	var json=$.parseJSON(data); 
-											    	
-											        if (json.status==0){
-											        	//刷新数据列表,效率较低
-											        	//$('#dg').datagrid('reload');
-											        	//将编辑的数据直接更新数据列表中对应的列
-											        	articledg.datagrid('updateRow',{index:rowindex,row:json.array});
-											        	//console.info(json.array);
-											        	//消息提示 
-											            showMessage('提示',json.desc);
-											        }else{
-											        	showMessage('提示',json.desc);
-											        }  
-											        //关闭弹出窗
-										        	editarticleDialog.dialog('close');
-											    }    
-											}); 
-									}
-								} ],
-								onLoad:function(){
-									//加载编辑窗口的时候，给表单赋值
-									$.post('${pageContext.request.contextPath}/article/findarticleById',{id:rows[0].id},function(data){
-										var json=$.parseJSON(data); 
-										if(json.status==0){
-											$('#editarticleForm').form('load',json.array);
-											$('#logo').attr('src','${pageContext.request.contextPath}/article/findImgById?id='+rows[0].id);
-											
-										}
-									});
-								},
+								
 								onClose:function(){
 									//在窗口关闭之后触发
 									editarticleDialog.dialog('destroy');
