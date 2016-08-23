@@ -14,8 +14,11 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestFastjson {
+	private static final Logger logger = LoggerFactory.getLogger(TestFastjson.class);
 
 	//fastjson序列化单个对象 与反序列化
 	@Test
@@ -144,10 +147,9 @@ public class TestFastjson {
 		//构造过滤器
 		SimplePropertyPreFilter filter = new SimplePropertyPreFilter(Employee.class, "id", "age");
 		String jsonStr =JSON.toJSONString(emps, filter);
-		
-		System.out.println(jsonStr);
+		logger.warn(jsonStr);
+		logger.info("test color");
 	}
-	
 	
 	//fastjson 日期处理
 	@Test	
@@ -194,5 +196,10 @@ public class TestFastjson {
 		System.out.println(jsonStr);
 		
 	}
-	
+	@Test
+	public void test10(){
+		Date date = new Date();
+		System.out.println(date.getTime());
+
+	}
 }

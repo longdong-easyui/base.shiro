@@ -233,7 +233,7 @@
 			 * @param {} msg
 			 * @returns {} 
 			 */
-			function showMessage(title,msg){
+			function showMessage(title,msg){returns
 				$.messager.show({
 					title:title,
 					msg:msg,
@@ -241,6 +241,7 @@
 					timeout:5000
 				});
 			}
+
 		</script>
 </body> 
 

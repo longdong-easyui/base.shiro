@@ -42,7 +42,7 @@ public class SpringJdbcTest {
 		int rows = user.getRows();
 		
        List<User> list = jdbcTemplate.query(sql,new BeanPropertyRowMapper(User.class));
-       System.out.println(">>>>>>>>>>>pagnation query");
+       System.out.println(">>>>>>>>>>>Pagnation query");
 	   System.out.println(list.size());
 	   for(User u : list){
 		   System.out.println(u.getUsername());
